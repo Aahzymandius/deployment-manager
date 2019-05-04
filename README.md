@@ -1,2 +1,2 @@
 # deployment-manager
-various deployment manager manifests to create testing environments
+Deployment Manager manifests for creating different testing environments 
