@@ -1,0 +1,136 @@
+resources:
+- name: gallagher
+  type: container.v1.cluster
+  properties:
+    zone: us-central1-a
+    cluster:
+      name: gallagher      
+      network: pw-net-1
+      subnetwork: london
+      initialClusterVersion: latest
+      resourceLabels:
+        test-cluster: public-ubuntu
+      nodePools:
+      - name: gallagher
+        initialNodeCount: 0
+        autoscaling:
+          enabled: true
+          minNodeCount: 1
+          maxNodeCount: 3
+        config:
+          machineType: n1-standard-1
+          diskSizeGb: 100
+          imageType: UBUNTU
+          preemptible: false
+          oauthScopes:
+          - https://www.googleapis.com/auth/devstorage.read_only
+          - https://www.googleapis.com/auth/logging.write
+          - https://www.googleapis.com/auth/monitoring
+          - https://www.googleapis.com/auth/servicecontrol
+          - https://www.googleapis.com/auth/service.management.readonly
+          - https://www.googleapis.com/auth/source.read_only
+          - https://www.googleapis.com/auth/trace.append
+        management:
+          autoUpgrade: false
+          autoRepair: false
+      addonsConfig:
+        networkPolicyConfig:
+          disabled: false
+- name: connolly
+  type: container.v1.cluster
+  properties:
+    zone: us-central1-f
+    cluster:
+      name: connolly
+      network: pw-net-2
+      subnetwork: brighton
+      initialClusterVersion: latest
+      resourceLabels:
+        test-cluster: public-cos
+      nodePools:
+      - name: connolly
+        initialNodeCount: 0
+        autoscaling:
+          enabled: true
+          minNodeCount: 1
+          maxNodeCount: 3
+        config:
+          machineType: n1-standard-1
+          diskSizeGb: 100
+          imageType: COS
+          preemptible: false
+          oauthScopes:
+          - https://www.googleapis.com/auth/devstorage.read_only
+          - https://www.googleapis.com/auth/logging.write
+          - https://www.googleapis.com/auth/monitoring
+          - https://www.googleapis.com/auth/servicecontrol
+          - https://www.googleapis.com/auth/service.management.readonly
+          - https://www.googleapis.com/auth/source.read_only
+          - https://www.googleapis.com/auth/trace.append
+        management:
+          autoUpgrade: true
+          autoRepair: true
+      locations:
+      - us-central1-f
+      - us-central1-c
+- name: sheehy
+  type: container.v1.cluster
+  properties:
+    zone: us-central1-f
+    cluster:
+      name: sheehy
+      network: pw-network
+      subnetwork: dublin
+      resourceLabels:
+        test-cluster: private
+      addonsConfig:
+        kubernetesDashboard:
+          disabled: true
+        networkPolicyConfig:
+          disabled: false
+        httpLoadBalancing:
+          disabled: false
+      ##New Beta logging and monitoring
+      loggingService: logging.googleapis.com/kubernetes
+      monitoringService: monitoring.googleapis.com/kubernetes
+      ##Use network Policy
+      networkPolicy:
+        provider: CALICO
+        enabled: true
+      ##VPC-Native
+      ipAllocationPolicy:  
+        useIpAliases: true
+        createSubnetwork: false
+        clusterSecondaryRangeName: pod-cidr
+        servicesSecondaryRangeName: service-cidr
+      ##Configure node Pool
+      nodePools:
+      - name: sheehy
+        initialNodeCount: 3
+        autoscaling:
+          enabled: true
+          minNodeCount: 2
+          maxNodeCount: 6
+        management:
+          autoRepair: true
+          autoUpgrade: false
+        config:
+          machineType: n1-standard-1
+          diskSizeGb: 100
+          imageType: COS
+          diskType: pd-standard
+      ##Configure how to auth against master endpoint. Disable both will rely on IAM
+      masterAuth:
+        clientCertificateConfig:
+          issueClientCertificate: false
+        username: ""
+      ##Private cluster necessities
+      masterAuthorizedNetworksConfig:
+        enabled: true
+        cidrBlocks:
+        - displayName: bastion
+        ##Replace cidrBlock with correct bastion static IP
+          cidrBlock: x.x.x.x
+      privateClusterConfig:
+        enablePrivateNodes: true
+        masterIpv4CidrBlock: 172.16.0.0/28          
