@@ -1,4 +1,4 @@
-{% set PROJECT_ID = "clusters" + env["deployment"] %}
+{% set PROJECT_ID = "shared-vpc" + env["deployment"] %}
 
 - name: {{ PROJECT_ID }}
   type: gcp-types/cloudresourcemanager-v1:projects
