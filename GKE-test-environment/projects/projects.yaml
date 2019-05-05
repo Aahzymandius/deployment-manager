@@ -7,6 +7,53 @@ resources:
   type: project1.jinja
   properties:
     organizationId: ORG_ID
+    billing-account-name: billingAccounts/BILLING_ACCOUNT_ID
+    apis:
+    - compute.googleapis.com
+    - deploymentmanager.googleapis.com
+    - storage-component.googleapis.com
+    - monitoring.googleapis.com
+    - logging.googleapis.com
+    set-dm-service-account-as-owner: true
+    iam-policy-patch:
+      add:
+      - role: roles/viewer
+        members:
+        # CHANGEME: Change this to your email address
+        - user:EMAIL
+      - role: roles/compute.networkUser
+        members:
+        # CHANGEME: Change this to your email address
+        - user:EMAIL
+        - serviceAccount: service-$(ref.project2.projectNumber)@container-engine-robot.iam.gserviceaccount.com
+        - serviceAccount: $(ref.project2.projectNumber)@cloudservices.gserviceaccount.com
+      - role: roles/deploymentmanager.editor
+        members:
+        # CHANGEME: Change this to your email address
+        - user:EMAIL
+    shared_vpc_host: true
+    
 - name: proejct2
   type: project2.jinja
     organizationId: $(ref.project1.organizationId)
+    billing-account-name: $(ref.project1.billing-account-name)
+    apis:
+    - compute.googleapis.com
+    - container.googleapis.com
+    - deploymentmanager.googleapis.com
+    - storage-component.googleapis.com
+    - monitoring.googleapis.com
+    - logging.googleapis.com
+    set-dm-service-account-as-owner: true
+    iam-policy-patch:
+      add:
+      - role: roles/editor
+        members:
+        # CHANGEME: Change this to your email address
+        - user:EMAIL
+      - role: roles/compute.admin
+        members:
+        # CHANGEME: Change this to your email address
+        - user:EMAIL
+    # CHANGEME: Change this to the name of your host project for the Shared VPC
+    shared_vpc_service_of: $(ref.project1.projectId)
