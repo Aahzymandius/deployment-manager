@@ -1,0 +1,42 @@
+resources:
+- name: shared-vpc
+  type: compute.vi.networks
+  properties:
+    name: shared-vc
+    autoCreateSubnetworks: FALSE
+- name: local-only
+  type: compute.v1.subnetworks
+  properties:
+    name: local
+    network: $(ref.shared-vpc.selflink)
+    ipCidrRange: 192.168.2.0/24
+    region: us-central1
+    privateIpGoogleAccess: TRUE
+    secondaryIpRanges:
+    - rangeName: pods
+      ipCidrRange: 172.16.64.0/18
+    - rangeName: service1
+      ipCidrRange: 172.16.136.0/22
+    - rangeName: service2
+      ipCidrRange: 172.16.140.0/22
+  metadata:
+    dependsOn:
+      shared-vpc
+- name: cluster-subnet
+  type: compute.v1.subnetworks
+  properties:
+    name: clusters
+    network: $(ref.shared-vpc.selflink)
+    ipCidrRange: 192.168.0.0/24
+    region: us-central1
+    privateIpGoogleAccess: TRUE
+    secondaryIpRanges:
+    - rangeName: pods
+      ipCidrRange: 172.16.192.0/18
+    - rangeName: service1
+      ipCidrRange: 172.16.128.0/22
+    - rangeName: service2
+      ipCidrRange: 172.16.132.0/22
+  metadata:
+    dependsOn:
+      shared-vpc
