@@ -1,0 +1,31 @@
+resources:
+- name: lampyip
+  type: compute.v1.addresses
+  properties:
+    addressType: EXTERNAL
+    region: us-central1
+- name: lampy
+  type: compute.v1.instance
+  properties:
+    tags:
+      items:
+      - bastion
+    machineType: zones/us-central1-f/machineTypes/n1-standard-1
+    zone: us-central1-f
+    disks:
+    - boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: projects/debian-cloud/global/images/family/debian-9
+        diskSizeGb: 20
+    networkInterfaces:
+    - subnetwork: projects/pwolthausen-dev/regions/us-central1/subnetworks/dublin
+      accessConfigs:
+      - natIP: "$(ref.lampyip.address)"
+    metadata:
+      items:
+      - key: startup-script
+        value: #! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install telnet\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common\ncurl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -\nadd-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"\napt-get update\napt-get -y install docker-ce\napt-get -y install unattended-upgrades apt-listchanges
+  metadata:
+    dependsOn:
+    - lampyip  
