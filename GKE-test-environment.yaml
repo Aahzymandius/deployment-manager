@@ -1,0 +1,12 @@
+imports:
+- project1.jinja
+- project2.jinja
+
+resources:
+- name: project1
+  type: project1.jinja
+  properties:
+    organizationId: ORG_ID
+- name: proejct2
+  type: project2.jinja
+    organizationId: $(ref.project1.organizationId)
