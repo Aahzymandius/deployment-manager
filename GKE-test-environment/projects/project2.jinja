@@ -1,0 +1,9 @@
+{% set PROJECT_ID = "shared-vpc" + env["deployment"] %}
+
+- name: {{ PROJECT_ID }}
+  type: gcp-types/cloudresourcemanager-v1:projects
+  properties:
+    projectId: {{ PROJECT_ID }}
+    parent:
+      type: organization
+      id: {{ properties["organizationId"] }}
