@@ -1,20 +1,13 @@
 imports:
-- project1.jinja
-- project2.jinja
+- projects.jinja
 
 resources:
 - name: project1
-  type: project1.jinja
+  type: projects.jinja
   properties:
-    organizationId: ORG_ID
-    billing-account-name: billingAccounts/BILLING_ACCOUNT_ID
-    apis:
-    - compute.googleapis.com
-    - deploymentmanager.googleapis.com
-    - storage-component.googleapis.com
-    - monitoring.googleapis.com
-    - logging.googleapis.com
-    set-dm-service-account-as-owner: true
+    name: shared-vpc
+    organizationId: [ORG_ID]
+    billing-account-name: [billingAccounts/BILLING_ACCOUNT_ID]
     iam-policy-patch:
       add:
       - role: roles/viewer
@@ -33,18 +26,12 @@ resources:
         - user:EMAIL
     shared_vpc_host: true
     
-- name: proejct2
-  type: project2.jinja
+- name: project2
+  type: projects.jinja
+  properties:
+    name: gke-test
     organizationId: $(ref.project1.organizationId)
     billing-account-name: $(ref.project1.billing-account-name)
-    apis:
-    - compute.googleapis.com
-    - container.googleapis.com
-    - deploymentmanager.googleapis.com
-    - storage-component.googleapis.com
-    - monitoring.googleapis.com
-    - logging.googleapis.com
-    set-dm-service-account-as-owner: true
     iam-policy-patch:
       add:
       - role: roles/editor
