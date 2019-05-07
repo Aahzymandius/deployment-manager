@@ -1,98 +1,79 @@
+imports:
+- clusters.jinja
+
 resources:
 - name: gallagher
-  type: container.v1.cluster
+  type: clusters.jinja
   properties:
-    zone: us-central1-a
+    name: gallagher
+    zone: [zone]
+	network: [VPC_network]
+	subnetwork: [VPC_subnet]
+	initialNodeCount: 0 ##number of nodes the clusters should start with
+	machineType: n1-standard-1
     cluster:
-      name: gallagher      
-      network: pw-net-1
-      subnetwork: london
-      initialClusterVersion: latest
+	  ##Set desired cluster labels
       resourceLabels:
-        test-cluster: public-ubuntu
+        test-cluster: public-ubuntu 
       nodePools:
-      - name: gallagher
-        initialNodeCount: 0
-        autoscaling:
+	    ##Set autoscaling values. Remove if autoscaling is not wanted
+      - autoscaling:
           enabled: true
           minNodeCount: 1
           maxNodeCount: 3
         config:
-          machineType: n1-standard-1
-          diskSizeGb: 100
+		  ##UBUNTU or COS
           imageType: UBUNTU
-          preemptible: false
-          oauthScopes:
-          - https://www.googleapis.com/auth/devstorage.read_only
-          - https://www.googleapis.com/auth/logging.write
-          - https://www.googleapis.com/auth/monitoring
-          - https://www.googleapis.com/auth/servicecontrol
-          - https://www.googleapis.com/auth/service.management.readonly
-          - https://www.googleapis.com/auth/source.read_only
-          - https://www.googleapis.com/auth/trace.append
         management:
           autoUpgrade: false
           autoRepair: false
       addonsConfig:
         networkPolicyConfig:
           disabled: false
+		  
 - name: connolly
-  type: container.v1.cluster
+  type: clusters.jinja
   properties:
-    zone: us-central1-f
+    name: connolly
+    zone: [zone]
+	network: [VPC_network]
+	subnetwork: [VPC_subnet]
+	initialNodeCount: 0 ##number of nodes the clusters should start with
+	machineType: n1-standard-1
     cluster:
-      name: connolly
-      network: pw-net-2
-      subnetwork: brighton
-      initialClusterVersion: latest
       resourceLabels:
         test-cluster: public-cos
       nodePools:
-      - name: connolly
-        initialNodeCount: 0
-        autoscaling:
+	    ##Set autoscaling values. Remove if autoscaling is not wanted
+      - autoscaling:
           enabled: true
           minNodeCount: 1
           maxNodeCount: 3
         config:
-          machineType: n1-standard-1
-          diskSizeGb: 100
           imageType: COS
-          preemptible: false
-          oauthScopes:
-          - https://www.googleapis.com/auth/devstorage.read_only
-          - https://www.googleapis.com/auth/logging.write
-          - https://www.googleapis.com/auth/monitoring
-          - https://www.googleapis.com/auth/servicecontrol
-          - https://www.googleapis.com/auth/service.management.readonly
-          - https://www.googleapis.com/auth/source.read_only
-          - https://www.googleapis.com/auth/trace.append
         management:
           autoUpgrade: true
           autoRepair: true
+	  ##list zones to deploy nodes in
       locations:
       - us-central1-f
       - us-central1-c
+	  
 - name: sheehy
-  type: container.v1.cluster
+  type: clusters.jinja
   properties:
-    zone: us-central1-f
+    name: sheehy
+    zone: [zone]
+	network: [VPC_network]
+	subnetwork: [VPC_subnet]
+	initialNodeCount: 3 ##number of nodes the clusters should start with
+	machineType: n1-standard-1
     cluster:
-      name: sheehy
-      network: pw-network
-      subnetwork: dublin
       resourceLabels:
         test-cluster: private
       addonsConfig:
-        kubernetesDashboard:
-          disabled: true
         networkPolicyConfig:
           disabled: false
-        httpLoadBalancing:
-          disabled: false
-      ##New Beta logging and monitoring
-      loggingService: logging.googleapis.com/kubernetes
-      monitoringService: monitoring.googleapis.com/kubernetes
       ##Use network Policy
       networkPolicy:
         provider: CALICO
@@ -100,30 +81,19 @@ resources:
       ##VPC-Native
       ipAllocationPolicy:  
         useIpAliases: true
-        createSubnetwork: false
-        clusterSecondaryRangeName: pod-cidr
-        servicesSecondaryRangeName: service-cidr
-      ##Configure node Pool
+        createSubnetwork: false #set to true to create new secondary ranges
+        clusterSecondaryRangeName: [pod-cidr]
+        servicesSecondaryRangeName: [service-cidr]
       nodePools:
-      - name: sheehy
-        initialNodeCount: 3
-        autoscaling:
+      - autoscaling:
           enabled: true
           minNodeCount: 2
           maxNodeCount: 6
         management:
           autoRepair: true
           autoUpgrade: false
-        config:
-          machineType: n1-standard-1
-          diskSizeGb: 100
-          imageType: COS
-          diskType: pd-standard
-      ##Configure how to auth against master endpoint. Disable both will rely on IAM
-      masterAuth:
-        clientCertificateConfig:
-          issueClientCertificate: false
-        username: ""
+		config:
+		  imageType: COS
       ##Private cluster necessities
       masterAuthorizedNetworksConfig:
         enabled: true
@@ -133,4 +103,4 @@ resources:
           cidrBlock: x.x.x.x
       privateClusterConfig:
         enablePrivateNodes: true
-        masterIpv4CidrBlock: 172.16.0.0/28          
+        masterIpv4CidrBlock: 172.16.0.0/28 
