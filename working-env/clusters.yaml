@@ -7,22 +7,22 @@ resources:
   properties:
     name: gallagher
     zone: [zone]
-	network: [VPC_network]
-	subnetwork: [VPC_subnet]
-	initialNodeCount: 0 ##number of nodes the clusters should start with
-	machineType: n1-standard-1
+    network: [VPC_network]
+    subnetwork: [VPC_subnet]
+    initialNodeCount: 0 ##number of nodes the clusters should start with
+    machineType: n1-standard-1
     cluster:
-	  ##Set desired cluster labels
+      ##Set desired cluster labels
       resourceLabels:
         test-cluster: public-ubuntu 
       nodePools:
-	    ##Set autoscaling values. Remove if autoscaling is not wanted
+        ##Set autoscaling values. Remove if autoscaling is not wanted
       - autoscaling:
           enabled: true
           minNodeCount: 1
           maxNodeCount: 3
         config:
-		  ##UBUNTU or COS
+          ##UBUNTU or COS
           imageType: UBUNTU
         management:
           autoUpgrade: false
@@ -30,21 +30,21 @@ resources:
       addonsConfig:
         networkPolicyConfig:
           disabled: false
-		  
+
 - name: connolly
   type: clusters.jinja
   properties:
     name: connolly
     zone: [zone]
-	network: [VPC_network]
-	subnetwork: [VPC_subnet]
-	initialNodeCount: 0 ##number of nodes the clusters should start with
-	machineType: n1-standard-1
+    network: [VPC_network]
+    subnetwork: [VPC_subnet]
+    initialNodeCount: 0 ##number of nodes the clusters should start with
+    machineType: n1-standard-1
     cluster:
       resourceLabels:
         test-cluster: public-cos
       nodePools:
-	    ##Set autoscaling values. Remove if autoscaling is not wanted
+        ##Set autoscaling values. Remove if autoscaling is not wanted
       - autoscaling:
           enabled: true
           minNodeCount: 1
@@ -54,20 +54,20 @@ resources:
         management:
           autoUpgrade: true
           autoRepair: true
-	  ##list zones to deploy nodes in
+      ##list zones to deploy nodes in
       locations:
       - us-central1-f
       - us-central1-c
-	  
+
 - name: sheehy
   type: clusters.jinja
   properties:
     name: sheehy
     zone: [zone]
-	network: [VPC_network]
-	subnetwork: [VPC_subnet]
-	initialNodeCount: 3 ##number of nodes the clusters should start with
-	machineType: n1-standard-1
+    network: [VPC_network]
+    subnetwork: [VPC_subnet]
+    initialNodeCount: 3 ##number of nodes the clusters should start with
+    machineType: n1-standard-1
     cluster:
       resourceLabels:
         test-cluster: private
@@ -92,8 +92,8 @@ resources:
         management:
           autoRepair: true
           autoUpgrade: false
-		config:
-		  imageType: COS
+        config:
+          imageType: COS
       ##Private cluster necessities
       masterAuthorizedNetworksConfig:
         enabled: true
