@@ -1,9 +1,0 @@
-{% set PROJECT_ID = "clusters" + env["deployment"] %}
-
-- name: {{ PROJECT_ID }}
-  type: gcp-types/cloudresourcemanager-v1:projects
-  properties:
-    projectId: {{ PROJECT_ID }}
-    parent:
-      type: organization
-      id: {{ properties["organizationId"] }}
