@@ -126,7 +126,7 @@ resources:
     - IPProtocol: TCP
       ports: 
       - 443
-- name: allow-web-traffic
+- name: bastion-ssh
   type: compute.v1.firewall
   properties:
     network: $(ref.pw-network.selfLink)
