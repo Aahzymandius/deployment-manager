@@ -30,6 +30,6 @@
 
 16. My “echoheader” workload has been exposed with an ingress, yet there is still no external IP, what am I doing wrong?
 
-17. In my “narwhal” cluster, I am able to ping “google.com” from my “curler” pods, but I can’t reach my internal database which is located in another subnet on my shared VPC. **Note: I am able to reach my internal DB from my bastion VM**
+17. In my “narwhal” cluster, I can’t reach my internal database which is located in another subnet on my shared VPC. **Note: I am able to reach my internal DB from my bastion VM** (not sure what this was supposed to be, but will configure it to be a networkPolicy issue)
 
 18. Autoscaling is enabled on the “mongoose” cluster. There are multiple nodes with under 50% resource usage, why won’t it scale down?
