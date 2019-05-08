@@ -1,5 +1,5 @@
 imports:
-- projects.jinja
+- path: projects.jinja
 
 resources:
 - name: project1
