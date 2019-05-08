@@ -1,6 +1,7 @@
 
 {% set PROJECT_ID = {{ properties["name"] }} + env["deployment"] %}
 
+resources:
 - name: {{ PROJECT_ID }}
   type: gcp-types/cloudresourcemanager-v1:projects
   properties:
