@@ -43,6 +43,11 @@ resources:
     cluster:
       resourceLabels:
         test-cluster: public-cos
+      ipAllocationPolicy:  
+        useIpAliases: true
+        createSubnetwork: false #set to true to create new secondary ranges
+        clusterSecondaryRangeName: [pod-cidr]
+        servicesSecondaryRangeName: [service-cidr]
       nodePools:
         ##Set autoscaling values. Remove if autoscaling is not wanted
       - autoscaling:
