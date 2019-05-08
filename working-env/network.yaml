@@ -1,4 +1,34 @@
 resources:
+- name: firewall1
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-icmp
+    network: default
+- name: firewall2
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-internal
+    network: default
+- name: firewall3
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-ssh
+    network: default
+- name: firewall4
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-rdp
+    network: default   
+- name: default
+  action: gcp-types/compute-v1:compute.networks.delete
+  properties:
+    network: default
+  metadata:
+    dependsOn:
+    - firewall1
+    - firewall2
+    - firewall3
+    - firewall4
 - name: pw-net-1
   type: compute.v1.network
   properties: 
@@ -160,12 +190,12 @@ resources:
   properties:
     region: us-central1
     addressType: EXTERNAL
-- name: lampyip
+- name: bastionip
   type: compute.v1.addresses
   properties:
     addressType: EXTERNAL
     region: us-central1
-- name: lampy
+- name: bastion
   type: compute.v1.instance
   properties:
     tags:
@@ -182,11 +212,11 @@ resources:
     networkInterfaces:
     - subnetwork: $(ref.dublin.selfLink)
       accessConfigs:
-      - natIP: "$(ref.lampyip.address)"
+      - natIP: "$(ref.bastionip.address)"
     metadata:
       items:
       - key: startup-script
         value: #! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install telnet\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common\ncurl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -\nadd-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"\napt-get update\napt-get -y install docker-ce\napt-get -y install unattended-upgrades apt-listchanges
   metadata:
     dependsOn:
-    - lampyip 
+    - bastionip
