@@ -1,4 +1,5 @@
 resources:
+##Remove the default VPC
 - name: firewall1
   action: gcp-types/compute-v1:compute.firewalls.delete
   properties:
@@ -29,6 +30,8 @@ resources:
     - firewall2
     - firewall3
     - firewall4
+
+##Create first network with subnets
 - name: pw-net-1
   type: compute.v1.network
   properties: 
@@ -45,6 +48,7 @@ resources:
     network: $(ref.pw-net-1.selfLink)
     ipCidrRange: 192.168.1.0/24
     region: us-central1
+##Second network with subnets
 - name: pw-net-2
   type: compute.v1.network
   properties: 
@@ -61,6 +65,7 @@ resources:
     network: $(ref.pw-net-2.selfLink)
     ipCidrRange: 192.168.4.0/24
     region: us-central1
+##Peer first two networks
 - name: addPeering-1-2
   action: gcp-types/compute-v1:compute.networks.addPeering
   metadata:
@@ -89,6 +94,8 @@ resources:
       dependsOn:
       - pw-net-1
       - pw-net-2
+
+##Create priamry working network and subnets
 - name: pw-network
   type: compute.v1.network
   properties: 
@@ -139,6 +146,7 @@ resources:
     network: $(ref.pw-network.selfLink)
     region: europe-west1
     ipCidrRange: 192.168.50.0/24
+##Set some basic necessary firewall rules for the primary network
 - name: allow-web-traffic
   type: compute.v1.firewall
   properties:
@@ -180,6 +188,8 @@ resources:
     - 192.168.0.0/16
     allowed:
     - IPProtocol: all
+    
+##Create static IPs    
 - name: mysite-ing
   type: compute.v1.globalAddresses
   properties:
@@ -195,6 +205,8 @@ resources:
   properties:
     addressType: EXTERNAL
     region: us-central1
+
+##Create a bastion host for the project in the primary network
 - name: bastion
   type: compute.v1.instance
   properties:
