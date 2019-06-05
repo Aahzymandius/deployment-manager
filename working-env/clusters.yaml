@@ -1,5 +1,5 @@
 imports:
-- clusters.jinja
+- path: clusters.jinja
 
 resources:
 - name: gallagher
@@ -68,7 +68,8 @@ resources:
   type: clusters.jinja
   properties:
     name: sheehy
-    zone: [zone]
+    apiVersion: v1beta1
+    location: [zone]
     network: [VPC_network]
     subnetwork: [VPC_subnet]
     initialNodeCount: 3 ##number of nodes the clusters should start with
