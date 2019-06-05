@@ -11,6 +11,7 @@ Setting up the Troubleshooting environment
 3. From the Cloud shell of the "shared-vpc" project, run:
 gcloud deployment-manager deployments create shared-vpc-resources --config resources.yaml --preview
 
-If all the checks pass, deploy it by running the command again without the  --preview flag
+If all the checks pass, deploy it by running the an update command without specifying the config file:
+gcloud deployment-manager deployments update shared-vpc-resources
 This will remove the default VPC and will create a new custom VPC which will be used as the shared VPC in the gke-ts project.
 
