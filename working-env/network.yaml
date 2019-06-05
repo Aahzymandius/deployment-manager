@@ -68,9 +68,6 @@ resources:
 ##Peer first two networks
 - name: addPeering-1-2
   action: gcp-types/compute-v1:compute.networks.addPeering
-  metadata:
-    runTimePolicy:
-    - CREATE
   properties:
     network: pw-net-1
     name: peering-1-2
@@ -80,11 +77,10 @@ resources:
     dependsOn:
     - pw-net-1
     - pw-net-2
-- name: addPeering-2-1
-  action: gcp-types/compute-v1:compute.networks.addPeering
-  metadata:
     runTimePolicy:
     - CREATE
+- name: addPeering-2-1
+  action: gcp-types/compute-v1:compute.networks.addPeering
   properties:
     network: pw-net-2
     name: peering-2-1
@@ -94,6 +90,8 @@ resources:
       dependsOn:
       - pw-net-1
       - pw-net-2
+      runTimePolicy:
+      - CREATE
 
 ##Create priamry working network and subnets
 - name: pw-network
