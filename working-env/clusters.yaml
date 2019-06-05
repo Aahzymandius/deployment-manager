@@ -6,7 +6,7 @@ resources:
   type: clusters.jinja
   properties:
     name: gallagher
-    zone: [zone]
+    location: [zone] #define a region to use regional cluster
     network: [VPC_network]
     subnetwork: [VPC_subnet]
     initialNodeCount: 0 ##number of nodes the clusters should start with
@@ -35,7 +35,7 @@ resources:
   type: clusters.jinja
   properties:
     name: connolly
-    zone: [zone]
+    location: [zone] #define a region to use regional cluster
     network: [VPC_network]
     subnetwork: [VPC_subnet]
     initialNodeCount: 0 ##number of nodes the clusters should start with
@@ -68,8 +68,7 @@ resources:
   type: clusters.jinja
   properties:
     name: sheehy
-    apiVersion: v1beta1
-    location: [zone]
+    location: [zone] #define a region to use regional cluster
     network: [VPC_network]
     subnetwork: [VPC_subnet]
     initialNodeCount: 3 ##number of nodes the clusters should start with
