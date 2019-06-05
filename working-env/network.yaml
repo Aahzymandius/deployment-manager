@@ -229,6 +229,8 @@ resources:
         value: "#! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install telnet\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common\ncurl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -\nadd-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable'\napt-get update\napt-get -y install docker-ce\napt-get -y install unattended-upgrades apt-listchanges"
       - key: enable-oslogin
         value: "TRUE"
+      - key: block-project-ssh-keys
+        value: "true"
   metadata:
     dependsOn:
     - bastionip
