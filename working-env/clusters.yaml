@@ -2,110 +2,25 @@ imports:
 - path: clusters.jinja
 
 resources:
-- name: gallagher
+- name: [cluster-name]
   type: clusters.jinja
   properties:
-    name: gallagher
-    location: [zone] #define a region to use regional cluster
-    network: [VPC_network]
-    subnetwork: [VPC_subnet]
-    initialNodeCount: 0 ##number of nodes the clusters should start with
-    machineType: n1-standard-1
-    cluster:
-      ##Set desired cluster labels
-      resourceLabels:
-        test-cluster: public-ubuntu 
-      nodePools:
-        ##Set autoscaling values. Remove if autoscaling is not wanted
-      - autoscaling:
-          enabled: true
-          minNodeCount: 1
-          maxNodeCount: 3
-        config:
-          ##UBUNTU or COS
-          imageType: UBUNTU
-        management:
-          autoUpgrade: false
-          autoRepair: false
-      addonsConfig:
-        networkPolicyConfig:
-          disabled: false
-
-- name: connolly
-  type: clusters.jinja
-  properties:
-    name: connolly
-    location: [zone] #define a region to use regional cluster
-    network: [VPC_network]
-    subnetwork: [VPC_subnet]
-    initialNodeCount: 0 ##number of nodes the clusters should start with
-    machineType: n1-standard-1
-    cluster:
-      resourceLabels:
-        test-cluster: public-cos
-      ipAllocationPolicy:  
-        useIpAliases: true
-        createSubnetwork: false #set to true to create new secondary ranges
-        clusterSecondaryRangeName: [pod-cidr]
-        servicesSecondaryRangeName: [service-cidr]
-      nodePools:
-        ##Set autoscaling values. Remove if autoscaling is not wanted
-      - autoscaling:
-          enabled: true
-          minNodeCount: 1
-          maxNodeCount: 3
-        config:
-          imageType: COS
-        management:
-          autoUpgrade: true
-          autoRepair: true
-      ##list zones to deploy nodes in
-      locations:
-      - us-central1-f
-      - us-central1-c
-
-- name: sheehy
-  type: clusters.jinja
-  properties:
-    name: sheehy
-    location: [zone] #define a region to use regional cluster
-    network: [VPC_network]
-    subnetwork: [VPC_subnet]
-    initialNodeCount: 3 ##number of nodes the clusters should start with
-    machineType: n1-standard-1
-    cluster:
-      resourceLabels:
-        test-cluster: private
-      addonsConfig:
-        networkPolicyConfig:
-          disabled: false
-      ##Use network Policy
-      networkPolicy:
-        provider: CALICO
-        enabled: true
-      ##VPC-Native
-      ipAllocationPolicy:  
-        useIpAliases: true
-        createSubnetwork: false #set to true to create new secondary ranges
-        clusterSecondaryRangeName: [pod-cidr]
-        servicesSecondaryRangeName: [service-cidr]
-      nodePools:
-      - autoscaling:
-          enabled: true
-          minNodeCount: 2
-          maxNodeCount: 6
-        management:
-          autoRepair: true
-          autoUpgrade: false
-        config:
-          imageType: COS
-      ##Private cluster necessities
-      masterAuthorizedNetworksConfig:
-        enabled: true
-        cidrBlocks:
-        - displayName: bastion
-        ##Replace cidrBlock with correct bastion static IP
-          cidrBlock: x.x.x.x
-      privateClusterConfig:
-        enablePrivateNodes: true
-        masterIpv4CidrBlock: 172.16.0.0/28 
+    name: 
+    location: 
+    network: 
+    subnetwork: 
+    version:
+    key:
+    value:
+    vpc-native:
+    pod-cidr:
+    service-cidr:
+    networkPolicy:
+    private-cluster:
+    allowed-host:
+    host-ip:
+    master-cidr:
+    initialNodeCount:
+    image:
+    machineType: 
+    logging: 
