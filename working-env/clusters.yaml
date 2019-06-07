@@ -9,18 +9,18 @@ resources:
     location: 
     network: 
     subnetwork: 
+    initialNodeCount:
     version:
-    key:
-    value:
+    image:
+    machineType:
+    logging:
+    networkPolicy:
     vpc-native:
     pod-cidr:
     service-cidr:
-    networkPolicy:
     private-cluster:
     allowed-host:
     host-ip:
-    master-cidr:
-    initialNodeCount:
-    image:
-    machineType: 
-    logging: 
+    master-cidr: 
+    label1:
+    label2:
