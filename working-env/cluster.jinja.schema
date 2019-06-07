@@ -9,11 +9,6 @@ properties:
   name: 
     type: string
 	description: name of the cluster and nodes
-
-  initialNodeCount:
-    type: number
-	description: number of nodes at creation per zone
-	default: 3
 	
   location:
     type: string
@@ -28,6 +23,11 @@ properties:
     type: string
 	description: The name of the Google Compute Engine subnetwork to which the cluster is connected.
     default: default
+    
+  initialNodeCount:
+    type: number
+	description: number of nodes at creation per zone
+	default: 3
   
   version:
     type: string
@@ -36,8 +36,57 @@ properties:
 	
   image:
     type: string
-	default: COS
+	default: cos
 	description: image used on the nodes.
 	enum:
-	  - COS
-	  - UBUNTU
+	  - cos
+	  - ubuntu
+      
+  machineType:
+    type: string
+    default: n1-standard-1
+    description: Select a built in or custom machine type
+    
+  logging:
+    type: boolean
+    default: true
+    description: false to use legacy logging and monitoring
+    
+  networkPolicy:
+    type: boolean
+    description: true enables calico CNI for network policy in cluster
+    default: false
+    
+  vpc-native:
+    type: boolean
+    default: false
+    description: true to enable vpc-native pods
+    
+  pod-cidr:
+    type: string
+    description: Only use if vpc-native is set to true. Allows you to select a secondary ip range to use for pods. Range must already exist.
+    
+  service-cidr:
+    type: string
+    description: Only use if vpc-native is set to true. Allows you to select a secondary ip range to use for services. Range must already exist. 
+    
+  private-cluster:
+    type: boolean
+    description: true to disable external IPs for nodes.
+    default: false
+    
+  allowed-host:
+    type: string
+    description: name of the host or subnet that can access the cluster endpoint
+    
+  host-ip:
+    type: string
+    description: cidr to be allowed access to the cluster endpoint.
+    
+  master-cidr:
+    type: string
+    description: Must be entered if "private-cluster" is set to true. a /28 cidr to be assigned to the masters
+    
+  label#:
+    type: string
+    description: optional cluster label, supports up to 2 labels (label1 and label2). Must be a key: value pair
