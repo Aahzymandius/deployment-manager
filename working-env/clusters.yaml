@@ -1,9 +1,9 @@
 imports:
-- path: clusters.jinja
+- path: cluster.jinja
 
 resources:
 - name: [cluster-name]
-  type: clusters.jinja
+  type: cluster.jinja
   properties:
     name: 
     location: 
