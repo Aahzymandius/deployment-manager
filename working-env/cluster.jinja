@@ -19,7 +19,7 @@ resources:
         useIpAliases: false
         {% endif %}
       {% endif %}
-      {% if properties["networkPolicy"] %}
+      {% if properties["networkPolicy"] == "true" %}
       networkPolicy:
         provider: CALICO
         enabled: true
@@ -77,7 +77,7 @@ resources:
           disabled: true
         httpLoadBalancing:
           disabled: false
-        {% if properties["networkPolicy"] %}
+        {% if properties["networkPolicy"] == "true" %}
         networkPolicyConfig:
-          disabled: true
+          disabled: false
         {% endif %}
