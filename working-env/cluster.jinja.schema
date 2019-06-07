@@ -8,39 +8,39 @@ required:
 properties:
   name: 
     type: string
-	description: name of the cluster and nodes
+    description: name of the cluster and nodes
 
   location:
     type: string
-	description: zone or region to create the cluster. Region will create a regional cluster.
+    description: zone or region to create the cluster. Region will create a regional cluster.
 
   network:
     type: string
-	description: The name of the Google Compute Engine network to which the cluster is connected. If left unspecified, the default network will be used.
-	default: default
+    description: The name of the Google Compute Engine network to which the cluster is connected. If left unspecified, the default network will be used.
+    default: default
 
-  subnet:
+  subnetwork:
     type: string
-	description: The name of the Google Compute Engine subnetwork to which the cluster is connected.
+    description: The name of the Google Compute Engine subnetwork to which the cluster is connected.
     default: default
 
   initialNodeCount:
     type: number
-	description: number of nodes at creation per zone
-	default: 3
+    description: number of nodes at creation per zone
+    default: 3
 
   version:
     type: string
-	description: initial version of the cluster (master and nodes)
-	default: latest
+    description: initial version of the cluster (master and nodes)
+    default: latest
 
   image:
     type: string
-	default: cos
-	description: image used on the nodes.
-	enum:
-	  - cos
-	  - ubuntu
+    default: cos
+    description: image used on the nodes.
+    enum:
+      - cos
+      - ubuntu
 
   machineType:
     type: string
