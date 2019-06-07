@@ -1,0 +1,35 @@
+import:
+  - path: cluster.jinja
+
+required:
+  - name
+  - location
+
+properties:
+  name: 
+    type: string
+	description: name of the cluster and nodes
+
+  initialNodeCount:
+    type: number
+	description: number of nodes at creation per zone
+	default: 3
+	
+  location:
+    type: string
+	description: zone or region to create the cluster. Region will create a regional cluster.
+	
+  network:
+    type: string
+	description: The name of the Google Compute Engine network to which the cluster is connected. If left unspecified, the default network will be used.
+	default: default
+
+  subnet:
+    type: string
+	description: The name of the Google Compute Engine subnetwork to which the cluster is connected.
+    default: default
+  
+  version:
+    type: string
+	description: initial version of the cluster (master and nodes)
+	default: latest
