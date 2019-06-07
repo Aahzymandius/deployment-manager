@@ -8,23 +8,23 @@ resources:
       network: {{ properties["network"] }}
       subnetwork: {{ properties["subnetwork"] }}
       initialClusterVersion: {{ properties["version"] }}
-      {% if properties["vpc-native"]=="true" %}
+      {% if properties["vpc-native"] %}
       ipAllocationPolicy:
         useIpAliases: true
         {% if properties["pod-cidr"] %}
-        createSubnetworks: true
+        createSubnetworks: false
         clusterSecondaryRangeName: {{ properties["pod-cidr"] }}
         servicesSecondaryRangeName: {{ properties["service-cidr"] }}
         {% else %}
-        useIpAliases: false
+        createSubnetworks: true
         {% endif %}
       {% endif %}
-      {% if properties["networkPolicy"] == "true" %}
+      {% if properties["networkPolicy"] %}
       networkPolicy:
         provider: CALICO
         enabled: true
       {% endif %}
-      {% if properties["private-cluster"]=="true" %}
+      {% if properties["private-cluster"] %}
       masterAuthorizedNetworksConfig:
         enabled: true
         cidrBlocks:
@@ -68,7 +68,7 @@ resources:
           issueClientCertificate: false
         username: ""
       ##New Beta logging and monitoring
-      {% if properties["logging"]=="true" %}
+      {% if properties["logging"] %}
       loggingService: logging.googleapis.com/kubernetes
       monitoringService: monitoring.googleapis.com/kubernetes
       {% endif %}
@@ -77,7 +77,7 @@ resources:
           disabled: true
         httpLoadBalancing:
           disabled: false
-        {% if properties["networkPolicy"] == "true" %}
+        {% if properties["networkPolicy"] %}
         networkPolicyConfig:
           disabled: false
         {% endif %}
