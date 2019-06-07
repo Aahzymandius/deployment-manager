@@ -5,8 +5,8 @@ resources:
 - name: [cluster-name]
   type: cluster.jinja
   properties:
-    name: 
-    location: 
+    name: [required]
+    location: [required]
     network: 
     subnetwork: 
     initialNodeCount:
