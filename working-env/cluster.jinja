@@ -8,7 +8,7 @@ resources:
       network: {{ properties["network"] }}
       subnetwork: {{ properties["subnetwork"] }}
       initialClusterVersion: {{ properties["version"] }}
-      {% if properties["vpc-native"] == "true" %}
+      {% if properties["vpc-native"]=="true" %}
       ipAllocationPolicy:
         useIpAliases: true
         {% if properties["pod-cidr"] %}
@@ -24,7 +24,7 @@ resources:
         provider: CALICO
         enabled: true
       {% endif %}
-      {% if properties["private-cluster"] == "true" %}
+      {% if properties["private-cluster"]=="true" %}
       masterAuthorizedNetworksConfig:
         enabled: true
         cidrBlocks:
@@ -42,7 +42,7 @@ resources:
           minNodeCount: 1
           maxNodeCount: 3
         management:
-        {% if properties["image"] == "cos" %}
+        {% if properties["image"]=="cos" %}
           autoUpgrade: true
           autoRepair: true
         {% else %}
@@ -68,7 +68,7 @@ resources:
           issueClientCertificate: false
         username: ""
       ##New Beta logging and monitoring
-      {% if properties["logging"] == "true" %}
+      {% if properties["logging"]=="true" %}
       loggingService: logging.googleapis.com/kubernetes
       monitoringService: monitoring.googleapis.com/kubernetes
       {% endif %}
