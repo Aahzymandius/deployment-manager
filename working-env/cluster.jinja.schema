@@ -33,3 +33,11 @@ properties:
     type: string
 	description: initial version of the cluster (master and nodes)
 	default: latest
+	
+  image:
+    type: string
+	default: COS
+	description: image used on the nodes.
+	enum:
+	  - COS
+	  - UBUNTU
