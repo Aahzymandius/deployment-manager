@@ -1,0 +1,83 @@
+resources:
+- name: {{ properties["name"] }}
+  type: gcp-types/container-v1beta1:projects.locations.clusters
+  properties:
+    parent: projects/{{ env["project"] }}/locations/{{ properties["location"] }}
+    cluster:
+      name: {{ properties["name"] }}      
+      network: {{ properties["network"] }}
+      subnetwork: {{ properties["subnetwork"] }}
+      initialClusterVersion: {{ properties["version"] }}
+      {% if properties["vpc-native"] %}
+      ipAllocationPolicy:
+        useIpAliases: true
+        {% if properties["pod-cidr"] %}
+        createSubnetworks: false
+        clusterSecondaryRangeName: {{ properties["pod-cidr"] }}
+        servicesSecondaryRangeName: {{ properties["service-cidr"] }}
+        {% else %}
+        createSubnetworks: true
+        {% endif %}
+      {% endif %}
+      {% if properties["networkPolicy"] %}
+      networkPolicy:
+        provider: CALICO
+        enabled: true
+      {% endif %}
+      {% if properties["private-cluster"] %}
+      masterAuthorizedNetworksConfig:
+        enabled: true
+        cidrBlocks:
+        - displayName: {{ properties["allowed-host"] }}
+          cidrBlock: {{ properties["host-ip"] }}
+      privateClusterConfig:
+        enablePrivateNodes: true
+        masterIpv4CidrBlock: {{ properties["master-cidr"] }}
+      {% endif %}
+      nodePools:
+      - name: {{ properties["name"] }} 
+        initialNodeCount: {{ properties["initialNodeCount"] }}
+        autoscaling:
+          enabled: true
+          minNodeCount: 1
+          maxNodeCount: 3
+        management:
+        {% if properties["image"]=="cos" %}
+          autoUpgrade: true
+          autoRepair: true
+        {% else %}
+          autoUpgrade: false
+          autoRepair: false
+        {% endif %}
+        config:
+          imageType: {{ properties["image"] }}
+          machineType: {{ properties["machineType"] }}
+          diskSizeGb: 100
+          preemptible: false
+          oauthScopes:
+          - https://www.googleapis.com/auth/devstorage.read_only
+          - https://www.googleapis.com/auth/logging.write
+          - https://www.googleapis.com/auth/monitoring
+          - https://www.googleapis.com/auth/servicecontrol
+          - https://www.googleapis.com/auth/service.management.readonly
+          - https://www.googleapis.com/auth/source.read_only
+          - https://www.googleapis.com/auth/trace.append
+      ##Configure how to auth against master endpoint. Disable both will rely on IAM
+      masterAuth:
+        clientCertificateConfig:
+          issueClientCertificate: false
+        username: ""
+      ##New Beta logging and monitoring
+      {% if properties["logging"] %}
+      loggingService: logging.googleapis.com/kubernetes
+      monitoringService: monitoring.googleapis.com/kubernetes
+      {% endif %}
+      addonsConfig:
+        kubernetesDashboard:
+          disabled: true
+        httpLoadBalancing:
+          disabled: false
+        {% if properties["networkPolicy"] %}
+        networkPolicyConfig:
+          disabled: false
+        {% endif %}
