@@ -1,0 +1,24 @@
+imports:
+- path: clusters.jinja
+
+resources:
+- name: [cluster-name]
+  type: cluster.jinja
+  properties:
+    name: [required]
+    location: [required]
+    network: 
+    subnetwork: 
+    initialNodeCount:
+    version:
+    image:
+    machineType:
+    logging:
+    networkPolicy:
+    vpc-native:
+    pod-cidr:
+    service-cidr:
+    private-cluster:
+    allowed-host:
+    host-ip:
+    master-cidr: 
