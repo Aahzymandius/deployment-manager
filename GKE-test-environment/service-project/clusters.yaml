@@ -2,13 +2,21 @@ imports:
 - path: clusters.jinja
 
 resources:
-- name: [cluster-name]
-  type: cluster.jinja
+- name: standard-cluster-1
+  type: clusters.jinja
   properties:
-    name: [required]
-    location: [required]
-    network: 
-    subnetwork: 
+    name: standard-cluster-1
+    location: us-central1-a
+    network: local-vpc
+    subnetwork: primary-local
+
+- name: moose
+  type: clusters.jinja
+  properties:
+    name: moose
+    location: us-central1-c
+    network: local-vpc
+    subnetwork: primary-local
     initialNodeCount:
     version:
     image:
