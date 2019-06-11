@@ -1,0 +1,149 @@
+resources:
+#Remove default VPC
+- name: firewall1
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-icmp
+    network: default
+- name: firewall2
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-internal
+    network: default
+- name: firewall3
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-ssh
+    network: default
+- name: firewall4
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-rdp
+    network: default   
+- name: default
+  action: gcp-types/compute-v1:compute.networks.delete
+  properties:
+    network: default
+  metadata:
+    dependsOn:
+    - firewall1
+    - firewall2
+    - firewall3
+    - firewall4
+#Create new VPC and subnets
+- name: shared-vpc
+  type: compute.vi.networks
+  properties:
+    name: shared-vc
+    autoCreateSubnetworks: FALSE
+- name: local-only
+  type: compute.v1.subnetworks
+  properties:
+    name: local
+    network: $(ref.shared-vpc.selflink)
+    ipCidrRange: 192.168.2.0/24
+    region: us-central1
+    privateIpGoogleAccess: TRUE
+    secondaryIpRanges:
+    - rangeName: pods
+      ipCidrRange: 172.16.64.0/18
+    - rangeName: service1
+      ipCidrRange: 172.16.136.0/22
+    - rangeName: service2
+      ipCidrRange: 172.16.140.0/22
+  metadata:
+    dependsOn:
+      shared-vpc
+- name: cluster-subnet
+  type: compute.v1.subnetworks
+  properties:
+    name: clusters
+    network: $(ref.shared-vpc.selflink)
+    ipCidrRange: 192.168.0.0/24
+    region: us-central1
+    privateIpGoogleAccess: TRUE
+    secondaryIpRanges:
+    - rangeName: pods
+      ipCidrRange: 172.16.192.0/18
+    - rangeName: service1
+      ipCidrRange: 172.16.128.0/22
+    - rangeName: service2
+      ipCidrRange: 172.16.132.0/22
+  metadata:
+    dependsOn:
+      shared-vpc
+#Create Firewall rules
+- name: allow-web-traffic
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.shared-vpc.selfLink)
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - web-server
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 80
+    - IPProtocol: TCP
+      ports: 
+      - 443
+  metadata:
+    dependsOn:
+      shared-vpc
+- name: bastion-ssh
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.shared-vpc.selfLink)
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - bastion
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 22
+  metadata:
+    dependsOn:
+      shared-vpc
+- name: allow-internal
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.shared-vpc.selfLink)
+    priority: 1000
+    direction: INGRESS
+    sourceRanges:
+    - 192.168.0.0/22
+    allowed:
+    - IPProtocol: all
+  metadata:
+    dependsOn:
+      shared-vpc
+#Create a bastion host
+- name: bastion
+  type: compute.v1.instance
+  properties:
+    tags:
+      items:
+      - bastion
+    machineType: zones/us-central1-f/machineTypes/n1-standard-1
+    zone: us-central1-f
+    disks:
+    - boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: projects/debian-cloud/global/images/family/debian-9
+        diskSizeGb: 20
+    networkInterfaces:
+    - subnetwork: $(ref.local-only.selfLink)
+    metadata:
+      items:
+      - key: startup-script
+        value: #! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install telnet\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common\ncurl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -\nadd-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"\napt-get update\napt-get -y install docker-ce\napt-get -y install unattended-upgrades apt-listchanges
+  metadata:
+    dependsOn:
+    - local-only
