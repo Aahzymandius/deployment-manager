@@ -24,10 +24,12 @@ resources:
     networkInterfaces:
     - network: projects/{{ properties["hostProject"] }}/global/networks/{{ properties["network"] }}
       subnetwork: projects/{{ properties["hostProject"] }}/regions/us-central1/subnetworks/{{ properties["subnetwork"] }}
+      {% if properties["staticIp"] %}
       accessConfigs:
         kind: compute#accessConfig
         name: External NAT
         natIP: {{ properties["staticIp"] }}
+      {% endif %}
     metadata:
       items:
       - key: startup-script
