@@ -37,10 +37,15 @@ resources:
       nodePools:
       - name: {{ properties["name"] }} 
         initialNodeCount: {{ properties["initialNodeCount"] }}
+        {% if properties["autoscale"] %}
         autoscaling:
           enabled: true
-          minNodeCount: 1
-          maxNodeCount: 3
+          minNodeCount: {{ properties["minNodeCount"] }}
+          maxNodeCount: {{ properties["maxNodeCount"] }}
+        {% else %}
+        autoscaling:
+          enabled: false
+        {% endif %}
         management:
         {% if properties["image"]=="cos" %}
           autoUpgrade: true
