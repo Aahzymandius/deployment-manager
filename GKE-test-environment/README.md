@@ -1,6 +1,6 @@
-#Setting up the Troubleshooting environment
+# Setting up the Troubleshooting environment
 
-##Projects
+## Projects
 
 1. Create 2 projects: "shared-vpc" & "gke-ts"
 
@@ -10,4 +10,4 @@
     - deploymentmanager.googleapis.com
     - logging.googleapis.com
 
-##Host project
+## Host project
