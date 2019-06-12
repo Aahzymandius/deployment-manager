@@ -7,7 +7,8 @@ resource:
   properties:
     name: bastion
     zone: us-central1-c
-    hostProject: 
+  ##Update with host project ID
+    hostProject: [host-project-ID]
     network: shared-vpc
     subnetwork: clusters
     networkTag: bastion
