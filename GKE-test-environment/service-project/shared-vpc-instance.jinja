@@ -22,8 +22,8 @@ resources:
         {% endif %}
         diskSizeGb: 10
     networkInterfaces:
-    - network: projects/{{ env["project"] }}/global/networks/{{ properties["network"] }}
-      subnetwork: projects/{{ env["project"] }}/regions/us-central1/subnetworks/{{ properties["subnetwork"] }}
+    - network: projects/{{ properties["hostProject"] }}/global/networks/{{ properties["network"] }}
+      subnetwork: projects/{{ properties["hostProject"] }}/regions/us-central1/subnetworks/{{ properties["subnetwork"] }}
     metadata:
       items:
       - key: startup-script
