@@ -14,8 +14,8 @@
         sourceImage: projects/debian-cloud/global/images/family/debian-9
         diskSizeGb: 10
     networkInterfaces:
-    - network: projects/{{ env[project]/global/networks/shared-vpc
-      subnetwork: $(ref.local-only.selfLink)
+    - network: projects/{{ env["project"] }}/global/networks/shared-vpc
+      subnetwork: projects/{{ env["project"] }}/regions/us-central1/subnetworks/clusters
     metadata:
       items:
       - key: startup-script
