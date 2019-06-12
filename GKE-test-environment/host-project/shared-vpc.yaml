@@ -52,9 +52,6 @@ resources:
       ipCidrRange: 172.16.136.0/22
     - rangeName: service2
       ipCidrRange: 172.16.140.0/22
-  metadata:
-    dependsOn:
-      shared-vpc
 - name: cluster-subnet
   type: compute.v1.subnetworks
   properties:
@@ -74,9 +71,6 @@ resources:
       ipCidrRange: 172.16.144.0/22
     - rangeName: service4
       ipCidrRange: 172.16.148.0/22
-  metadata:
-    dependsOn:
-      shared-vpc
 
 #Create Firewall rules
 - name: allow-web-traffic
@@ -96,9 +90,6 @@ resources:
     - IPProtocol: TCP
       ports: 
       - 443
-  metadata:
-    dependsOn:
-      shared-vpc
 - name: allow-internal
   type: compute.v1.firewall
   properties:
@@ -110,30 +101,15 @@ resources:
     - 172.16.0.0/16
     allowed:
     - IPProtocol: all
-  metadata:
-    dependsOn:
-      shared-vpc
-#Create a webserver
-- name: weberver
-  type: compute.v1.instance
+
+- name: addPeering
+  action: gcp-types/compute-v1:compute.networks.addPeering
   properties:
-    tags:
-      items:
-      - web-server
-    machineType: zones/us-central1-f/machineTypes/n1-standard-1
-    zone: us-central1-f
-    disks:
-    - boot: true
-      autoDelete: true
-      initializeParams:
-        sourceImage: projects/debian-cloud/global/images/family/debian-9
-        diskSizeGb: 10
-    networkInterfaces:
-    - subnetwork: $(ref.local-only.selfLink)
-    metadata:
-      items:
-      - key: startup-script
-        value: "#! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get install dnsutils"
+    network: another-vpc
+	  name: shared-vpc-peering
+	  autoCreateRoutes: true
+  ## MAKE SURE TO REPLACE WITH THE SERVICE VPC PROJECT ID
+	  peerNetwork: projects/[service-project-id]/global/networks/another-vpc
   metadata:
-    dependsOn:
-    - local-only
+    runTimePolicy:
+  	- CREATE
