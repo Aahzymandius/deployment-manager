@@ -17,6 +17,111 @@ resources:
     location: us-central1-c
     network: local-vpc
     subnetwork: primary-local
+    initialNodeCount: 2
+
+    image:
+    machineType:
+    logging: 
+    networkPolicy:
+    vpc-native:
+    pod-cidr:
+    service-cidr:
+    private-cluster:
+    allowed-host:
+    host-ip:
+    master-cidr: 
+
+- name: hippo
+  type: clusters.jinja
+  properties:
+    name: hippo
+    location: 
+    network: 
+    subnetwork: 
+    initialNodeCount:
+    version:
+    image:
+    machineType:
+    logging:
+    networkPolicy:
+    vpc-native:
+    pod-cidr:
+    service-cidr:
+    private-cluster:
+    allowed-host:
+    host-ip:
+    master-cidr: 
+
+- name: lion
+  type: clusters.jinja
+  properties:
+    name: lion
+    location: 
+    network: 
+    subnetwork: 
+    initialNodeCount:
+    version:
+    image:
+    machineType:
+    logging:
+    networkPolicy:
+    vpc-native:
+    pod-cidr:
+    service-cidr:
+    private-cluster:
+    allowed-host:
+    host-ip:
+    master-cidr: 
+
+- name: mongoose
+  type: clusters.jinja
+  properties:
+    name: mongoose
+    location: 
+    network: 
+    subnetwork: 
+    initialNodeCount:
+    version:
+    image:
+    machineType:
+    logging:
+    networkPolicy:
+    vpc-native:
+    pod-cidr:
+    service-cidr:
+    private-cluster:
+    allowed-host:
+    host-ip:
+    master-cidr: 
+
+- name: narwhal
+  type: clusters.jinja
+  properties:
+    name: narwhal
+    location: 
+    network: 
+    subnetwork: 
+    initialNodeCount:
+    version:
+    image:
+    machineType:
+    logging:
+    networkPolicy:
+    vpc-native:
+    pod-cidr:
+    service-cidr:
+    private-cluster:
+    allowed-host:
+    host-ip:
+    master-cidr: 
+
+- name: zebra
+  type: clusters.jinja
+  properties:
+    name: zebra
+    location: 
+    network: 
+    subnetwork: 
     initialNodeCount:
     version:
     image:
