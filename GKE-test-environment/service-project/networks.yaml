@@ -45,13 +45,12 @@ resources:
         ipCidrRange: 10.0.0.0/8
       - rangeName: services1
         ipCidrRange: 172.16.0.0/20
-	  - rangeName: services2
-	    ipCidrRange: 172.16.16.0/20
-	  - rangeName: services3
-	    ipCidrRange: 172.16.32.0/20
-	  - rangeName: services4
-	    ipCidrRange: 172.16.48.0/20
-
+      - rangeName: services2
+        ipCidrRange: 172.16.16.0/20
+      - rangeName: services3
+        ipCidrRange: 172.16.32.0/20
+      - rangeName: services4
+        ipCidrRange: 172.16.48.0/20
 - name: allow-internal
   type: compute.v1.firewall
   properties:
@@ -60,8 +59,8 @@ resources:
     direction: INGRESS
     sourceRanges:
     - 192.168.0.0/16
-	  - 172.16.0.0/16
-  	- 10.0.0.0/8
+    - 172.16.0.0/16
+    - 10.0.0.0/8
     allowed:
     - IPProtocol: all
 
@@ -88,8 +87,8 @@ resources:
     direction: INGRESS
     sourceRanges:
     - 192.168.0.0/16
-	  - 172.16.0.0/16
-	  - 10.0.0.0/8
+    - 172.16.0.0/16
+    - 10.0.0.0/8
     allowed:
     - IPProtocol: all
 
@@ -97,10 +96,10 @@ resources:
   action: gcp-types/compute-v1:compute.networks.addPeering
   properties:
     network: another-vpc
-	  name: shared-vpc-peering
-	  autoCreateRoutes: true
-  ## MAKE SURE TO REPLACE WITH THE SHARED VPC PROJECT ID
-	  peerNetwork: projects/[shared-vpc-project-id]/global/networks/shared-vpc
+      name: shared-vpc-peering
+      autoCreateRoutes: true
+  ## MAKE SURE TO REPLACE WITH THE HOST VPC PROJECT ID
+      peerNetwork: projects/[shared-vpc-project-id]/global/networks/shared-vpc
   metadata:
     runTimePolicy:
-	- CREATE
+    - CREATE
