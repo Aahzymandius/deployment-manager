@@ -24,7 +24,13 @@ resources:
     networkInterfaces:
     - network: projects/{{ properties["hostProject"] }}/global/networks/{{ properties["network"] }}
       subnetwork: projects/{{ properties["hostProject"] }}/regions/us-central1/subnetworks/{{ properties["subnetwork"] }}
+      accessConfigs:
+        kind: compute#accessConfig
+        name: External NAT
+        natIP: {{ properties["staticIp"] }}
     metadata:
       items:
       - key: startup-script
         value: "#! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get install dnsutils"
+      - key: enable-oslogin
+        value: true
