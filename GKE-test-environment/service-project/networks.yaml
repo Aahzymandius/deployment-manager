@@ -1,0 +1,106 @@
+resources:
+- name: firewall1
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-icmp
+    network: default
+- name: firewall2
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-internal
+    network: default
+- name: firewall3
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-ssh
+    network: default
+- name: firewall4
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-rdp
+    network: default   
+- name: default
+  action: gcp-types/compute-v1:compute.networks.delete
+  properties:
+    network: default
+  metadata:
+    dependsOn:
+    - firewall1
+    - firewall2
+    - firewall3
+    - firewall4
+
+- name: local-vpc
+  type: compute.v1.network
+  properties: 
+    autoCreateSubnetworks: false
+- name: primary-local
+  type: compute.v1.subnetwork
+  properties:
+    network: $(ref.local-vpc.selfLink) 
+    ipCidrRange: 192.168.0.0/24
+    region: us-central1
+    secondaryIpRanges:
+      - rangeName: pods
+        ipCidrRange: 10.0.0.0/8
+      - rangeName: services1
+        ipCidrRange: 172.16.0.0/20
+	  - rangeName: services2
+	    ipCidrRange: 172.16.16.0/20
+	  - rangeName: services3
+	    ipCidrRange: 172.16.32.0/20
+	  - rangeName: services4
+	    ipCidrRange: 172.16.48.0/20
+
+- name: allow-internal
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.local-vpc.selfLink)
+    priority: 1000
+    direction: INGRESS
+    sourceRanges:
+    - 192.168.0.0/16
+	  - 172.16.0.0/16
+  	- 10.0.0.0/8
+    allowed:
+    - IPProtocol: all
+
+- name: another-vpc
+  type: compute.v1.network
+  properties: 
+    autoCreateSubnetworks: false
+- name: not-as-local
+  type: compute.v1.subnetwork
+  properties:
+    network: $(ref.another-vpc.selfLink) 
+    ipCidrRange: 192.168.56.0/24
+    region: us-central1
+    secondaryIpRanges:
+      - rangeName: pods
+        ipCidrRange: 172.16.0.0/23
+      - rangeName: services
+        ipCidrRange: 172.16.2.0/23
+- name: allow-internal
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.another-vpc.selfLink)
+    priority: 1000
+    direction: INGRESS
+    sourceRanges:
+    - 192.168.0.0/16
+	  - 172.16.0.0/16
+	  - 10.0.0.0/8
+    allowed:
+    - IPProtocol: all
+
+- name: addPeering
+  action: gcp-types/compute-v1:compute.networks.addPeering
+  properties:
+    network: another-vpc
+	  name: shared-vpc-peering
+	  autoCreateRoutes: true
+  ## MAKE SURE TO REPLACE WITH THE SHARED VPC PROJECT ID
+	  peerNetwork: projects/[shared-vpc-project-id]/global/networks/shared-vpc
+  metadata:
+    runTimePolicy:
+	- CREATE
