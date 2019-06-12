@@ -119,6 +119,7 @@ resources:
     parent: projects/{{ env["project"] }}/locations/us-central1-a
     cluster:
       name: mongoose
+  ## UPDATE WITH THE PROJECT ID OF THE SHARED VPC HOST PROJECT
       network: projects/[shared-vpc-project-id]/global/networks/shared-vpc
       subnetwork: projects/[shared-vpc-project-id]/regions/us-central1/subnetworks/clusters
       ipAllocationPolicy:
