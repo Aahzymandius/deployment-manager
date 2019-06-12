@@ -1,25 +1,30 @@
-#Create a webserver
-- name: weberver
+resources:
+- name: {{ properties["name"] }}
   type: compute.v1.instance
   properties:
+    {% if properties["networkTag"] %}
     tags:
       items:
-      - web-server
-    machineType: zones/us-central1-f/machineTypes/n1-standard-1
-    zone: us-central1-f
+      - {{ properties["networkTag"] }}
+    {% endif %}
+    {% if properties["machineType"] %}
+    machineType: zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
+    {% endif %}
+    zone: {{ properties["zone"] }}
     disks:
     - boot: true
       autoDelete: true
       initializeParams:
+        {% if properties["sourceImage"] %}
+        sourceImage: {{ properties["sourceImage"] }}
+        {% else %}
         sourceImage: projects/debian-cloud/global/images/family/debian-9
+        {% endif %}
         diskSizeGb: 10
     networkInterfaces:
-    - network: projects/{{ env["project"] }}/global/networks/shared-vpc
-      subnetwork: projects/{{ env["project"] }}/regions/us-central1/subnetworks/clusters
+    - network: projects/{{ env["project"] }}/global/networks/{{ properties["network"] }}
+      subnetwork: projects/{{ env["project"] }}/regions/us-central1/subnetworks/{{ properties["subnetwork"] }}
     metadata:
       items:
       - key: startup-script
         value: "#! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get install dnsutils"
-  metadata:
-    dependsOn:
-    - local-only
