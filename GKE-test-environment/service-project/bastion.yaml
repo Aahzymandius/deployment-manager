@@ -1,14 +1,15 @@
 imports:
-- path instance.jinja
+- path shared-vpc-instance.jinja
 
 resource:
 - name: instance1
   type: instance.jinja
   properties:
     name: bastion
-	  zone: us-central1-f
-	  network: shared-vpc
-	  subnetwork: local-only
-	  networkTag: web-server
-	  #machineType:
-	  #sourceImage:
+    zone: us-central1-c
+    hostProject: 
+    network: shared-vpc
+    subnetwork: clusters
+    networkTag: bastion
+    #machineType:
+    #sourceImage:
