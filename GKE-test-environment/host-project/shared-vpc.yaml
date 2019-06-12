@@ -35,7 +35,7 @@ resources:
 - name: shared-vpc
   type: compute.vi.networks
   properties:
-    name: shared-vc
+    name: shared-vpc
     autoCreateSubnetworks: FALSE
 - name: local-only
   type: compute.v1.subnetworks
