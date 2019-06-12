@@ -22,8 +22,12 @@ resources:
         {% endif %}
         diskSizeGb: 10
     networkInterfaces:
+    {% if properties["hostProject"] %}
     - network: projects/{{ properties["hostProject"] }}/global/networks/{{ properties["network"] }}
       subnetwork: projects/{{ properties["hostProject"] }}/regions/us-central1/subnetworks/{{ properties["subnetwork"] }}
+    {$ else %}
+    
+    {5 endif %}
       {% if properties["staticIp"] %}
       accessConfigs:
         kind: compute#accessConfig
