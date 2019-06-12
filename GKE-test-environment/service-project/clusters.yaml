@@ -44,20 +44,50 @@ resources:
     master-cidr: 172.16.64.0/28
 
 - name: lion
-  type: clusters.jinja
+  type: gcp-types/container-v1beta1:projects.locations.clusters
+  properties: 
+    parent: projects/{{ env["project"] }}/locations/us-central1
+    cluster:
+      name: mongoose
+      network: local-vpc
+      subnetwork: primary-local
+      ipAllocationPolicy:
+        useIpAliases: true
+        createSubnetworks: false
+        clusterSecondaryRangeName: pods
+        servicesSecondaryRangeName: service2
+      nodePools:
+      - source: $(ref.lion-node.selfLink)
+      - source: $(ref.lion-big-node.selfLink)
+      loggingService: logging.googleapis.com/kubernetes
+      monitoringService: monitoring.googleapis.com/kubernetes
+
+- name: lion-node
+  type: container.v1.nodePool
   properties:
     name: lion
-    location: us-central1
-    network: local-vpc
-    subnetwork: primary-local
-    initialNodeCount: 1
-    logging: true
-    vpc-native: true
-    pod-cidr: pods
-    service-cidr: services2
-    autoscale: true
-    minNodeCount: 1
-    maxNodeCount: 3
+    config:
+      initialNodeCount: 1
+      autoscaling:
+        enabled: true
+        minNodeCount: 1
+        maxNodeCount: 4
+      management:
+        autoUpgrade: true
+        autoRepair: true
+- name: lion-big-node
+  type: container.v1.nodePool
+  properties:
+    name: big-pods
+    config:
+      initialNodeCount: 1
+      management:
+        autoUpgrade: true
+        autoRepair: true
+      config:
+        machineType: n1-standard-2
+      autoscaling:
+        enabled: false
 
 - name: narwhal
   type: clusters.jinja
