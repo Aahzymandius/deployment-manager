@@ -1,8 +1,13 @@
+## GKE specific
+
 1. Why did the “standard-cluster-1” cluster fail to be created? How can I prevent this from happening with a new cluster?
 
 2. Why did the “moose” cluster fail to be created? How can I prevent this from happening with a new cluster?
 
 3. My “zebra” cluster worked fine with 2 nodes, I need to add one but it won’t work, why?
+
+
+## General Kubernetes
 
 4. kubectl commands from the bastion VM to the “hippo” cluster are timing out, this works fine from another VM in another project called “Lampy”. Why do the requests from bastion timeout? 
 
