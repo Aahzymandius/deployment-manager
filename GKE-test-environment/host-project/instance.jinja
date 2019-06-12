@@ -1,0 +1,25 @@
+#Create a webserver
+- name: weberver
+  type: compute.v1.instance
+  properties:
+    tags:
+      items:
+      - web-server
+    machineType: zones/us-central1-f/machineTypes/n1-standard-1
+    zone: us-central1-f
+    disks:
+    - boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: projects/debian-cloud/global/images/family/debian-9
+        diskSizeGb: 10
+    networkInterfaces:
+    - network: projects/{{ env[project]/global/networks/shared-vpc
+      subnetwork: $(ref.local-only.selfLink)
+    metadata:
+      items:
+      - key: startup-script
+        value: "#! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get install dnsutils"
+  metadata:
+    dependsOn:
+    - local-only
