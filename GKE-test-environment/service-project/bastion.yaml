@@ -11,6 +11,8 @@ resource:
     hostProject: [host-project-ID]
     network: shared-vpc
     subnetwork: clusters
+  ##Update staticIp with the bastion IP reserved in the host project. Use the IP address, not the name of the resource.
+    staticIp: [xxx.xxx.xxx.xxx]
     networkTag: bastion
     #machineType:
     #sourceImage:
