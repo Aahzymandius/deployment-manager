@@ -6,9 +6,11 @@ resource:
   type: instance.jinja
   properties:
     name: webserver
-  	zone: us-central1-f
-  	network: shared-vpc
-	  subnetwork: local-only
-  	networkTag: web-server
-	  #machineType:
-	  #sourceImage:
+    zone: us-central1-f
+    network: shared-vpc
+    subnetwork: local-only
+    networkTag: web-server
+    #hostProject:
+    #staticIp:
+    #machineType:
+    #sourceImage:
