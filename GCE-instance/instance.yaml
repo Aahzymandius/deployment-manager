@@ -1,0 +1,20 @@
+imports:
+- path instance.jinja
+
+resource:
+- name: instance1
+  type: instance.jinja
+  properties:
+    name: test1
+    zone: us-central1-c
+  ##Update with host project ID
+    #hostProject: [host-project-ID]
+    network: shared-vpc
+    subnetwork: local-only
+  ##Update staticIp with the bastion IP reserved in the host project. Use the IP address, not the name of the resource.
+    #staticIp: [xxx.xxx.xxx.xxx]
+    networkTag: 
+    - bastion
+    - web-server
+    #machineType:
+    #sourceImage:
