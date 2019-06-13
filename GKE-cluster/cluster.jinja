@@ -56,8 +56,11 @@ resources:
           disabled: false
         {% endif %}
 - name: nodePool1
-  type: 
-        initialNodeCount: {{ properties["initialNodeCount"] }}
+  type: container.v1.nodePool
+  properties: 
+    name: {{ properties["name"] }}
+    config:
+      initialNodeCount: {{ properties["initialNodeCount"] }}
         {% if properties["autoscale"] %}
         autoscaling:
           enabled: true
