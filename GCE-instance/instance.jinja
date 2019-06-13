@@ -2,25 +2,14 @@ resources:
 - name: {{ properties["name"] }}
   type: compute.v1.instance
   properties:
-    {% if properties["machineType"] %}
-    machineType: zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
-    {% endif %}
+    name: {{ properties["name"] }}
+    tags:
+      items:
+      - bastion
+      - web-server
+    machineType: 
     zone: {{ properties["zone"] }}
-    disks:
-    - boot: true
-      autoDelete: true
-      initializeParams:
-        {% if properties["sourceImage"] %}
-        sourceImage: {{ properties["sourceImage"] }}
-        {% else %}
-        sourceImage: projects/debian-cloud/global/images/family/debian-9
-        {% endif %}
-        diskSizeGb: 10
     networkInterfaces:
-    {% if properties["hostProject"] %}
-    - network: projects/{{ properties["hostProject"] }}/global/networks/{{ properties["network"] }}
-      subnetwork: projects/{{ properties["hostProject"] }}/regions/us-central1/subnetworks/{{ properties["subnetwork"] }}
-    {% else %}
-    - network: projects/{{ env["project"] }}/global/networks/{{ properties["network"] }}
-      subnetwork: projects/{{ env["project"] }}/regions/us-central1/subnetworks/{{ properties["subnetwork"] }}
-    {% endif %}
+      network: {{ properties["network"] }}
+      subnetwork: {{ properties["subnetwork"] }}
+      
