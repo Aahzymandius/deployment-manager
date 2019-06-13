@@ -35,7 +35,10 @@ resources:
         masterIpv4CidrBlock: {{ properties["master-cidr"] }}
       {% endif %}
       nodePools:
-      - name: {{ properties["name"] }} 
+      - source: $(ref.nodePool.selfLink)
+      {% if properties["pool1"] %}
+      - source: $(red.nodePool1.selfLink)
+      {% endif %}
       ##Configure how to auth against master endpoint. Disable both will rely on IAM
       masterAuth:
         clientCertificateConfig:
@@ -55,39 +58,76 @@ resources:
         networkPolicyConfig:
           disabled: false
         {% endif %}
-- name: nodePool1
+- name: nodePool
   type: container.v1.nodePool
   properties: 
     name: {{ properties["name"] }}
     config:
       initialNodeCount: {{ properties["initialNodeCount"] }}
-        {% if properties["autoscale"] %}
-        autoscaling:
-          enabled: true
-          minNodeCount: {{ properties["minNodeCount"] }}
-          maxNodeCount: {{ properties["maxNodeCount"] }}
-        {% else %}
-        autoscaling:
-          enabled: false
-        {% endif %}
-        management:
-        {% if properties["image"]=="cos" %}
-          autoUpgrade: true
-          autoRepair: true
-        {% else %}
-          autoUpgrade: false
-          autoRepair: false
-        {% endif %}
-        config:
-          imageType: {{ properties["image"] }}
-          machineType: {{ properties["machineType"] }}
-          diskSizeGb: 100
-          preemptible: false
-          oauthScopes:
-          - https://www.googleapis.com/auth/devstorage.read_only
-          - https://www.googleapis.com/auth/logging.write
-          - https://www.googleapis.com/auth/monitoring
-          - https://www.googleapis.com/auth/servicecontrol
-          - https://www.googleapis.com/auth/service.management.readonly
-          - https://www.googleapis.com/auth/source.read_only
-          - https://www.googleapis.com/auth/trace.append
+      {% if properties["autoscale"] %}
+      autoscaling:
+        enabled: true
+        minNodeCount: {{ properties["minNodeCount"] }
+        maxNodeCount: {{ properties["maxNodeCount"] }}
+      {% else %}
+      autoscaling:
+        enabled: false
+      {% endif %}
+      management:
+      {% if properties["image"]=="cos" %}
+        autoUpgrade: true
+        autoRepair: true
+      {% else %}
+        autoUpgrade: false
+        autoRepair: false
+      {% endif %}
+      config:
+        imageType: {{ properties["image"] }}
+        machineType: {{ properties["machineType"] }}
+        diskSizeGb: 100
+        preemptible: false
+        oauthScopes:
+        - https://www.googleapis.com/auth/devstorage.read_only
+        - https://www.googleapis.com/auth/logging.write
+        - https://www.googleapis.com/auth/monitoring
+        - https://www.googleapis.com/auth/servicecontrol
+        - https://www.googleapis.com/auth/service.management.readonly
+        - https://www.googleapis.com/auth/source.read_only
+        - https://www.googleapis.com/auth/trace.append
+{% if properties["pool1"] %}
+- name: nodePool1
+  type: container.v1.nodePool
+  properties: 
+    name: {{ properties["pool1"] }}
+    config:
+      initialNodeCount: {{ properties["initialNodeCount1"] }}
+      {% if properties["autoscale1"] %}
+      autoscaling:
+        enabled: true
+        minNodeCount: {{ properties["minNodeCount1"] }}
+        maxNodeCount: {{ properties["maxNodeCount1"] }}
+      {% else %}
+      autoscaling:
+        enabled: false
+      {% endif %}
+      management:
+      {% if properties["image1"]=="cos" %}
+        autoUpgrade: true
+        autoRepair: true
+      {% else %}
+        autoUpgrade: false
+        autoRepair: false
+      {% endif %}
+      config:
+        imageType: {{ properties["image1"] }}
+        machineType: {{ properties["machineType1"] }}
+        diskSizeGb: 100
+        preemptible: false
+        oauthScopes:
+        - https://www.googleapis.com/auth/devstorage.read_only
+        - https://www.googleapis.com/auth/logging.write
+        - https://www.googleapis.com/auth/monitoring
+        - https://www.googleapis.com/auth/servicecontrol
+        - https://www.googleapis.com/auth/service.management.readonly
+        - https://www.googleapis.com/auth/source.read_only
+        - https://www.googleapis.com/auth/trace.append
