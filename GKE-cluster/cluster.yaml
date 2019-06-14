@@ -9,19 +9,21 @@ resources:
     location: 
     network: 
     subnetwork:
+    version: 
     vpc-native: 
     pod-cidr: 
     service-cidr: 
-    version: 
-    networkPolicy:
     private-cluster:
+    enablePrivateEndpoint:
     hosts:
     - host-name:
       host-cidr:
     master-cidr:
+    networkPolicy:
+    httpLB:
+    istio:
     locations:
     - 
-    httpLB
     nodePools:
     - name: 
       initialNodeCount: 
