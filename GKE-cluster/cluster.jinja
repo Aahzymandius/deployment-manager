@@ -81,7 +81,7 @@ resources:
       name: {{ pool["name"] }}
       config:
         initialNodeCount: {{ pool["initialNodeCount"] }}
-        {% if pool["autoscale"] %}
+        {% if pool["minNodeCount"] %}
         autoscaling:
           enabled: true
           minNodeCount: {{ pool["minNodeCount"] }}
