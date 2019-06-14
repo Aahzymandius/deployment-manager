@@ -48,11 +48,8 @@ resources:
         clientCertificateConfig:
           issueClientCertificate: false
         username: ""
-      ##New Beta logging and monitoring
-      {% if properties["logging"] %}
       loggingService: logging.googleapis.com/kubernetes
       monitoringService: monitoring.googleapis.com/kubernetes
-      {% endif %}
       {% if properties["locations"] %}
       {% for zone in properties["locations"] %}
       - {{ zone }}
