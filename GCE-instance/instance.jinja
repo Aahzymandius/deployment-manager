@@ -7,9 +7,8 @@ resources:
       items:
       - bastion
       - web-server
-    machineType: 
+    machineType: projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
     zone: {{ properties["zone"] }}
     networkInterfaces:
-      network: {{ properties["network"] }}
+    - network: {{ properties["network"] }}
       subnetwork: {{ properties["subnetwork"] }}
-      
