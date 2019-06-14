@@ -70,11 +70,6 @@ properties:
     description: true enables calico CNI for network policy in cluster
     default: false
 
-  logging:
-    type: boolean
-    default: true
-    description: false to use legacy logging and monitoring
-
   locations:
     type: list
     description: list of zones to schedule nodes. Zones must reside within same region as location.
