@@ -1,0 +1,33 @@
+imports:
+- path: cluster.jinja
+
+resources:
+- name: 
+  type: cluster.jinja
+  properties:
+    name: 
+    location: 
+    network: 
+    subnetwork:
+    vpc-native: 
+    pod-cidr: 
+    service-cidr: 
+    version: 
+    networkPolicy:
+    private-cluster:
+    hosts:
+    - host-name:
+      host-cidr:
+    master-cidr
+    logging: true
+    locations:
+    - 
+    httpLB
+    nodePools:
+    - name: lilly
+      initialNodeCount: 
+      autoscale: 
+      minNodeCount: 
+      maxNodeCount: 
+      image:
+      machineType:
