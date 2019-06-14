@@ -24,42 +24,13 @@ properties:
     description: The name of the Google Compute Engine subnetwork to which the cluster is connected.
     default: default
 
-  initialNodeCount:
-    type: number
-    description: number of nodes at creation per zone
-    default: 3
-
   version:
     type: string
     description: initial version of the cluster (master and nodes)
     default: latest
 
-  image:
-    type: string
-    default: cos
-    description: image used on the nodes.
-    enum:
-      - cos
-      - ubuntu
-
-  machineType:
-    type: string
-    default: n1-standard-1
-    description: Select a built in or custom machine type
-
-  logging:
-    type: boolean
-    default: true
-    description: false to use legacy logging and monitoring
-
-  networkPolicy:
-    type: boolean
-    description: true enables calico CNI for network policy in cluster
-    default: false
-
   vpc-native:
     type: boolean
-    default: false
     description: true to enable vpc-native pods
 
   pod-cidr:
@@ -73,16 +44,71 @@ properties:
   private-cluster:
     type: boolean
     description: true to disable external IPs for nodes.
-    default: false
+    
+  privateEndpoint:
+    type: boolean
+    description: true to disable internet facing master endpoint
 
-  allowed-host:
+  hosts:
+    type: list
+    description: list of cidr to allow access to the master
+
+  hosts[].host-name:
     type: string
     description: name of the host or subnet that can access the cluster endpoint
 
-  host-ip:
+  hosts[].host-cidr:
     type: string
     description: cidr to be allowed access to the cluster endpoint.
 
   master-cidr:
     type: string
     description: Must be entered if "private-cluster" is set to true. a /28 cidr to be assigned to the masters
+
+  networkPolicy:
+    type: boolean
+    description: true enables calico CNI for network policy in cluster
+    default: false
+
+  logging:
+    type: boolean
+    default: true
+    description: false to use legacy logging and monitoring
+
+  locations:
+    type: list
+    description: list of zones to schedule nodes. Zones must reside within same region as location.
+
+  nodePools:
+    type: list
+    description: list of node pools to create for the cluster. Must define at least one
+
+  nodePools[].name:
+    type: string
+    description: name of node pool
+
+  nodePools[].initialNodeCount:
+    type: number
+    description: number of nodes at creation per zone
+    default: 3
+
+  nodePools[].minNodeCount:
+    type: number
+    description: minimum number of nodes per zone for this pool. Enables autoscaling
+
+  nodePools[].maxNodeCount:
+    type: number
+    description: max number of nodes per zone for this node pool
+
+  nodePools[].image:
+    type: string
+    default: cos
+    description: image used on the nodes.
+    enum:
+      - cos
+      - ubuntu
+
+  nodePools[].machineType:
+    type: string
+    default: n1-standard-1
+    description: Select a built in or custom machine type
