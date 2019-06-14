@@ -58,23 +58,24 @@ resources:
         networkPolicyConfig:
           disabled: false
         {% endif %}
-- name: nodePool
+{% for pool in properties["nodePools"] %}
+- name: {{ properties.nodePools["name"] }}
   type: container.v1.nodePool
   properties: 
-    name: {{ properties["name"] }}
+    name: {{ properties.nodePools["name"] }}
     config:
-      initialNodeCount: {{ properties["initialNodeCount"] }}
-      {% if properties["autoscale"] %}
+      initialNodeCount: {{ properties.nodePools["initialNodeCount"] }}
+      {% if properties.nodePools["autoscale"] %}
       autoscaling:
         enabled: true
-        minNodeCount: {{ properties["minNodeCount"] }
-        maxNodeCount: {{ properties["maxNodeCount"] }}
+        minNodeCount: {{ properties.nodePools["minNodeCount"] }
+        maxNodeCount: {{ properties.nodePools["maxNodeCount"] }}
       {% else %}
       autoscaling:
         enabled: false
       {% endif %}
       management:
-      {% if properties["image"]=="cos" %}
+      {% if properties.nodePools["image"]=="cos" %}
         autoUpgrade: true
         autoRepair: true
       {% else %}
@@ -82,8 +83,8 @@ resources:
         autoRepair: false
       {% endif %}
       config:
-        imageType: {{ properties["image"] }}
-        machineType: {{ properties["machineType"] }}
+        imageType: {{ properties.nodePools["image"] }}
+        machineType: projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties.nodePools["machineType"] }}
         diskSizeGb: 100
         preemptible: false
         oauthScopes:
@@ -94,41 +95,4 @@ resources:
         - https://www.googleapis.com/auth/service.management.readonly
         - https://www.googleapis.com/auth/source.read_only
         - https://www.googleapis.com/auth/trace.append
-{% if properties["pool1"] %}
-- name: nodePool1
-  type: container.v1.nodePool
-  properties: 
-    name: {{ properties["pool1"] }}
-    config:
-      initialNodeCount: {{ properties["initialNodeCount1"] }}
-      {% if properties["autoscale1"] %}
-      autoscaling:
-        enabled: true
-        minNodeCount: {{ properties["minNodeCount1"] }}
-        maxNodeCount: {{ properties["maxNodeCount1"] }}
-      {% else %}
-      autoscaling:
-        enabled: false
-      {% endif %}
-      management:
-      {% if properties["image1"]=="cos" %}
-        autoUpgrade: true
-        autoRepair: true
-      {% else %}
-        autoUpgrade: false
-        autoRepair: false
-      {% endif %}
-      config:
-        imageType: {{ properties["image1"] }}
-        machineType: {{ properties["machineType1"] }}
-        diskSizeGb: 100
-        preemptible: false
-        oauthScopes:
-        - https://www.googleapis.com/auth/devstorage.read_only
-        - https://www.googleapis.com/auth/logging.write
-        - https://www.googleapis.com/auth/monitoring
-        - https://www.googleapis.com/auth/servicecontrol
-        - https://www.googleapis.com/auth/service.management.readonly
-        - https://www.googleapis.com/auth/source.read_only
-        - https://www.googleapis.com/auth/trace.append
-{% endif %}
+(% endfor %}
