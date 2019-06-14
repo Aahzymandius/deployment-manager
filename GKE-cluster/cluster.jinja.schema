@@ -45,7 +45,7 @@ properties:
     type: boolean
     description: true to disable external IPs for nodes.
     
-  privateEndpoint:
+  enablePrivateEndpoint:
     type: boolean
     description: true to disable internet facing master endpoint
 
