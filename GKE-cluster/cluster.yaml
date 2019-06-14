@@ -19,7 +19,6 @@ resources:
     - host-name:
       host-cidr:
     master-cidr:
-    logging:
     locations:
     - 
     httpLB
