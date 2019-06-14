@@ -19,6 +19,9 @@ resources:
     - host-name:
       host-cidr:
     master-cidr:
+    labels:
+    - key:
+      value:
     networkPolicy:
     httpLB:
     istio:
