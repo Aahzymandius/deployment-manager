@@ -28,17 +28,20 @@ resources:
       masterAuthorizedNetworksConfig:
         enabled: true
         cidrBlocks:
-        - displayName: {{ properties["allowed-host"] }}
-          cidrBlock: {{ properties["host-ip"] }}
+        {% if properties["hosts"] %}
+        {% for host in properties["hosts"] %}
+        - displayName: {{ properties.hosts["host-name"] }}
+          cidrBlock: {{ properties.hosts["host-cidr"] }}
+        {% endfor %}
+        {% endif %}
       privateClusterConfig:
         enablePrivateNodes: true
         masterIpv4CidrBlock: {{ properties["master-cidr"] }}
       {% endif %}
       nodePools:
-      - source: $(ref.nodePool.selfLink)
-      {% if properties["pool1"] %}
-      - source: $(red.nodePool1.selfLink)
-      {% endif %}
+      {% for pool in properties["nodePools"] %}
+      - source: $(ref.{{ properties.nodePools["name"] }}.selfLink)
+      {% endfor %}
       ##Configure how to auth against master endpoint. Disable both will rely on IAM
       masterAuth:
         clientCertificateConfig:
@@ -49,11 +52,21 @@ resources:
       loggingService: logging.googleapis.com/kubernetes
       monitoringService: monitoring.googleapis.com/kubernetes
       {% endif %}
+      {% if properties["locations"] %}
+      {% for zone in properties["locations"] %}
+      - {{ zone }}
+      {% endfor %}
+      {% endif %}
       addonsConfig:
         kubernetesDashboard:
           disabled: true
+        {% if properties["httpLB"] %}
+        httpLoadBalancing:
+          disabled: true
+        {% else %}
         httpLoadBalancing:
           disabled: false
+        {% endif %}
         {% if properties["networkPolicy"] %}
         networkPolicyConfig:
           disabled: false
@@ -68,7 +81,7 @@ resources:
       {% if properties.nodePools["autoscale"] %}
       autoscaling:
         enabled: true
-        minNodeCount: {{ properties.nodePools["minNodeCount"] }
+        minNodeCount: {{ properties.nodePools["minNodeCount"] }}
         maxNodeCount: {{ properties.nodePools["maxNodeCount"] }}
       {% else %}
       autoscaling:
@@ -84,7 +97,7 @@ resources:
       {% endif %}
       config:
         imageType: {{ properties.nodePools["image"] }}
-        machineType: projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties.nodePools["machineType"] }}
+        machineType: {{ properties.nodePools["machineType"] }}
         diskSizeGb: 100
         preemptible: false
         oauthScopes:
