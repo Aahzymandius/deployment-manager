@@ -74,7 +74,7 @@ resources:
           disabled: false
         {% endif %}
 {% for pool in properties["nodePools"] %}
-- name: {{ pool["name"] }}
+- name: nodePool-{{ pool["name"] }}
   type: gcp-types/container-v1beta1:projects.locations.clusters.nodePools
   properties:
     parent: projects/{{ env["project"] }}/locations/{{ properties["location"] }}/clusters/{{ properties["name"] }} 
