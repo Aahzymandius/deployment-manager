@@ -4,7 +4,6 @@ import:
 required:
   - name
   - location
-  - nodePools[].name
 
 properties:
   name: 
