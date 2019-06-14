@@ -50,16 +50,17 @@ properties:
     description: true to disable internet facing master endpoint
 
   hosts:
-    type: object
+    type: array
     description: list of cidr to allow access to the master
+    items:
 
-  hosts[].host-name:
-    type: string
-    description: name of the host or subnet that can access the cluster endpoint
+      host-name:
+        type: string
+        description: name of the host or subnet that can access the cluster endpoint
 
-  hosts[].host-cidr:
-    type: string
-    description: cidr to be allowed access to the cluster endpoint.
+      host-cidr:
+        type: string
+        description: cidr to be allowed access to the cluster endpoint.
 
   master-cidr:
     type: string
@@ -81,39 +82,41 @@ properties:
     default: true
 
   locations:
-    type: object
+    type: array
     description: list of zones to schedule nodes. Zones must reside within same region as location.
 
   nodePools:
-    type: object
+    type: array
     description: list of node pools to create for the cluster. Must define at least one
+    items:
 
-  nodePools[].name:
-    type: string
-    description: name of node pool
+      name:
+        type: string
+        description: name of node pool
+        default: default
 
-  nodePools[].initialNodeCount:
-    type: number
-    description: number of nodes at creation per zone
-    default: 3
+      initialNodeCount:
+        type: number
+        description: number of nodes at creation per zone
+        default: 3
 
-  nodePools[].minNodeCount:
-    type: number
-    description: minimum number of nodes per zone for this pool. Enables autoscaling
+      minNodeCount:
+        type: number
+        description: minimum number of nodes per zone for this pool. Enables autoscaling
 
-  nodePools[].maxNodeCount:
-    type: number
-    description: max number of nodes per zone for this node pool
+      maxNodeCount:
+        type: number
+        description: max number of nodes per zone for this node pool
 
-  nodePools[].image:
-    type: string
-    default: cos
-    description: image used on the nodes.
-    enum:
-      - cos
-      - ubuntu
+      image:
+        type: string
+        default: cos
+        description: image used on the nodes.
+        enum:
+          - cos
+          - ubuntu
 
-  nodePools[].machineType:
-    type: string
-    default: n1-standard-1
-    description: Select a built in or custom machine type
+      machineType:
+        type: string
+        default: n1-standard-1
+        description: Select a built in or custom machine type
