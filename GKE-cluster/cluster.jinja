@@ -30,12 +30,13 @@ resources:
         cidrBlocks:
         {% if properties["hosts"] %}
         {% for host in properties["hosts"] %}
-        - displayName: {{ properties.hosts["host-name"] }}
-          cidrBlock: {{ properties.hosts["host-cidr"] }}
+        - displayName: {{ host["host-name"] }}
+          cidrBlock: {{ host["host-cidr"] }}
         {% endfor %}
         {% endif %}
       privateClusterConfig:
         enablePrivateNodes: true
+        enablePrivateEndpoint: {{ properties["enablePrivateEndpoint"] }}
         masterIpv4CidrBlock: {{ properties["master-cidr"] }}
       {% endif %}
       nodePools:
