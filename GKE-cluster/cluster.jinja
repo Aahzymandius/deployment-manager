@@ -41,7 +41,7 @@ resources:
       {% endif %}
       nodePools:
       {% for pool in properties["nodePools"] %}
-      - source: $(ref.{{ properties.nodePools["name"] }}.selfLink)
+      - source: $(ref.{{ pool["name"] }}.selfLink)
       {% endfor %}
       ##Configure how to auth against master endpoint. Disable both will rely on IAM
       masterAuth:
