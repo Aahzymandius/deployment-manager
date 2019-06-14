@@ -243,34 +243,72 @@ resources:
   type: cluster.jinja
   properties:
     name: sheehy
-    location: 
-    network: 
-    subnetwork:
-    version: 
-    vpc-native: 
-    pod-cidr: 
-    service-cidr: 
-    private-cluster:
-    enablePrivateEndpoint:
+    location: us-central1
+    network: pw-network
+    subnetwork: belfast
+    version: latest
+    vpc-native: true
+    pod-cidr: pod-cidr
+    service-cidr: service-cidr
+    private-cluster: true
+    enablePrivateEndpoint: true
     hosts:
-    - host-name:
-      host-cidr:
-    master-cidr:
+    - host-name: bastion
+      host-cidr: $(ref.bastionip.address)/32
+    master-cidr: 172.16.0.0/28
     labels:
-    - key:
-      value:
-    networkPolicy:
-    httpLB:
-    istio:
-    locations:
-    - 
+    - key: access-type
+      value: private
+    - key: location-type
+      value: regional
     nodePools:
-    - name: 
-      initialNodeCount: 
-      minNodeCount: 
-      maxNodeCount: 
-      image:
-      machineType:
-
-
-
+    - name: sheehy
+      initialNodeCount: 1
+      minNodeCount: 1
+      maxNodeCount: 3
+- name: gallagher
+  type: cluster.jinja
+  properties:
+    name: gallagher
+    location: us-central1-f
+    network: pw-net-1
+    subnetwork: london
+    version: [choose 1 minor version behind current release]
+    labels:
+    - key: access-type
+      value: public
+    - key: location-type
+      value: zonal
+    locations:
+    - us-central1-f
+    - us-central1-c
+    nodePools:
+    - name: gallagher
+      initialNodeCount: 0 
+- name: connolly
+  type: cluster.jinja
+  properties:
+    name: connolly
+    location: us-central1-c
+    network: pw-network
+    subnetwork: dublin
+    version: [2 minor version behind latest]
+    vpc-native: true
+    pod-cidr: pod-cidr
+    service-cidr: service-cidr
+    labels:
+    - key: access-type
+      value: public
+    - key: location-type 
+      value: zonal
+    networkPolicy: true
+    httpLB:
+    istio: true
+    locations:
+    - us-central1-a
+    - us-central1-c
+    nodePools:
+    - name: connolly
+      initialNodeCount: 0
+      minNodeCount: 1
+      maxNodeCount: 3
