@@ -51,7 +51,7 @@ properties:
     description: true to disable internet facing master endpoint
 
   hosts:
-    type: list
+    type: object
     description: list of cidr to allow access to the master
 
   hosts[].host-name:
@@ -82,11 +82,11 @@ properties:
     default: true
 
   locations:
-    type: list
+    type: object
     description: list of zones to schedule nodes. Zones must reside within same region as location.
 
   nodePools:
-    type: list
+    type: object
     description: list of node pools to create for the cluster. Must define at least one
 
   nodePools[].name:
