@@ -18,15 +18,14 @@ resources:
     hosts:
     - host-name:
       host-cidr:
-    master-cidr
-    logging: true
+    master-cidr:
+    logging:
     locations:
     - 
     httpLB
     nodePools:
-    - name: lilly
+    - name: 
       initialNodeCount: 
-      autoscale: 
       minNodeCount: 
       maxNodeCount: 
       image:
