@@ -51,16 +51,15 @@ properties:
 
   hosts:
     type: array
-    description: list of cidr to allow access to the master
     items:
-
-      host-name:
-        type: string
-        description: name of the host or subnet that can access the cluster endpoint
-
-      host-cidr:
-        type: string
-        description: cidr to be allowed access to the cluster endpoint.
+      type: object
+      properties:
+        host-name:
+          type: string
+          description: name of the host or subnet that can access the cluster endpoint
+        host-cidr:
+          type: string
+          description: cidr to be allowed access to the cluster endpoint.
 
   master-cidr:
     type: string
@@ -89,34 +88,30 @@ properties:
     type: array
     description: list of node pools to create for the cluster. Must define at least one
     items:
-
-      name:
-        type: string
-        description: name of node pool
-        default: default
-
-      initialNodeCount:
-        type: number
-        description: number of nodes at creation per zone
-        default: 3
-
-      minNodeCount:
-        type: number
-        description: minimum number of nodes per zone for this pool. Enables autoscaling
-
-      maxNodeCount:
-        type: number
-        description: max number of nodes per zone for this node pool
-
-      image:
-        type: string
-        default: cos
-        description: image used on the nodes.
-        enum:
-          - cos
-          - ubuntu
-
-      machineType:
-        type: string
-        default: n1-standard-1
-        description: Select a built in or custom machine type
+      type: object
+      properties:
+        name:
+          type: string
+          description: name of node pool
+          default: default
+        initialNodeCount:
+          type: number
+          description: number of nodes at creation per zone
+          default: 3
+        minNodeCount:
+          type: number
+          description: minimum number of nodes per zone for this pool. Enables autoscaling
+        maxNodeCount:
+          type: number
+          description: max number of nodes per zone for this node pool
+        image:
+          type: string
+          default: cos
+          description: image used on the nodes.
+          enum:
+            - cos
+            - ubuntu
+        machineType:
+          type: string
+          default: n1-standard-1
+          description: Select a built in or custom machine type
