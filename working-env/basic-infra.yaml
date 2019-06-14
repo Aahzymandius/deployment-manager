@@ -1,3 +1,6 @@
+imports:
+- path: cluster.jinja
+
 resources:
 ##Remove the default VPC
 - name: firewall1
@@ -234,3 +237,40 @@ resources:
   metadata:
     dependsOn:
     - bastionip
+
+##Create the GKE clusters
+- name: sheehy
+  type: cluster.jinja
+  properties:
+    name: sheehy
+    location: 
+    network: 
+    subnetwork:
+    version: 
+    vpc-native: 
+    pod-cidr: 
+    service-cidr: 
+    private-cluster:
+    enablePrivateEndpoint:
+    hosts:
+    - host-name:
+      host-cidr:
+    master-cidr:
+    labels:
+    - key:
+      value:
+    networkPolicy:
+    httpLB:
+    istio:
+    locations:
+    - 
+    nodePools:
+    - name: 
+      initialNodeCount: 
+      minNodeCount: 
+      maxNodeCount: 
+      image:
+      machineType:
+
+
+
