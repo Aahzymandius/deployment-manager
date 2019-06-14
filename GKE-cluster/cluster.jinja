@@ -51,6 +51,7 @@ resources:
       loggingService: logging.googleapis.com/kubernetes
       monitoringService: monitoring.googleapis.com/kubernetes
       {% if properties["locations"] %}
+      locations:
       {% for zone in properties["locations"] %}
       - {{ zone }}
       {% endfor %}
