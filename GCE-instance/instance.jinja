@@ -13,5 +13,28 @@ resources:
     machineType: projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
     zone: {{ properties["zone"] }}
     networkInterfaces:
-    - network: projects/{{ env["project"] }}/global/networks/{{ properties["network"] }}
-      subnetwork: projects/{{ env["project"] }}/regions/{{ properties["region"] }}/subnetworks/{{ properties["subnetwork"] }}
+    {% for eth in properties["networkInterfaces"] %}
+    - network: projects/{{ env["project"] }}/global/networks/{{ eth["network"] }}
+      subnetwork: projects/{{ env["project"] }}/regions/{{ properties["region"] }}/subnetworks/{{ eth["subnetwork"] }}
+      accessConfigs:
+        {% if eth["natIP"] %}
+        natIP: {{ eth["natIP"] }}
+        {% endif %}
+        {% if eth["ptr"] %}
+        setPublicPtr: true
+        publicPtrDomainName: {{ eth["ptrName"] }}
+        {% endif %}
+    {% endfor %}
+    disks:
+    - boot: true
+      autoDelete: {{ properties["autoDelete"] }}
+      initializeParams:
+        {% if properties["sourceSnapshot"] %}
+        sourceSnapshot: {{ properties["sourceSnapshot"] }}
+        {% else %}
+        sourceImage: {{ properties["image"] }}
+        {% endif %}
+        diskSizeGb: {{ properties["diskSize"] }}
+        diskType: /zones/{{ properties["zone"] }}/diskTypes/{{ properties["diskType"] }}
+    {% if properties["addDisks"] %}
+    {% for disk in
