@@ -3,12 +3,15 @@ resources:
   type: compute.v1.instance
   properties:
     name: {{ properties["name"] }}
+    {% if properties["tags"] %}
     tags:
       items:
-      - bastion
-      - web-server
+    {% for tag in properties["tags"] %}
+      - {{ tag }}
+    {% endfor %}
+    {% endif %}
     machineType: projects/{{ env["project"] }}/zones/{{ properties["zone"] }}/machineTypes/{{ properties["machineType"] }}
     zone: {{ properties["zone"] }}
     networkInterfaces:
-    - network: {{ properties["network"] }}
-      subnetwork: {{ properties["subnetwork"] }}
+    - network: projects/{{ env["project"] }}/global/networks/{{ properties["network"] }}
+      subnetwork: projects/{{ env["project"] }}/regions/{{ properties["region"] }}/subnetworks/{{ properties["subnetwork"] }}
