@@ -1,7 +1,7 @@
 imports:
 - path instance.jinja
 
-resource:
+resources:
 - name: instance1
   type: instance.jinja
   properties:
