@@ -1,0 +1,10 @@
+import:
+  - path: instance.jinja
+
+required:
+  - name
+
+properties:
+  name: 
+    type: string
+    description: name of the cluster and nodes
