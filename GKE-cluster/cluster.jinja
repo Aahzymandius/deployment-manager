@@ -58,13 +58,10 @@ resources:
       addonsConfig:
         kubernetesDashboard:
           disabled: true
-        {% if properties["httpLB"] %}
         httpLoadBalancing:
-          disabled: true
-        {% else %}
-        httpLoadBalancing:
-          disabled: false
-        {% endif %}
+          disabled: {{ properties["httpLB"] }}
+        istioConfig:
+          disabled: {{ properties["istio"] }}
         {% if properties["networkPolicy"] %}
         networkPolicyConfig:
           disabled: false
