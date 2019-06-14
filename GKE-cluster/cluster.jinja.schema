@@ -71,6 +71,16 @@ properties:
     description: true enables calico CNI for network policy in cluster
     default: false
 
+  httpLB:
+    type: boolean
+    description: determines if the GCE Ingress Controller will be used. true disables it 
+    default: false
+
+  istio:
+    type: boolean
+    description: determines whether istio on GKE is enabled for the cluster. true disables it
+    default: true
+
   locations:
     type: list
     description: list of zones to schedule nodes. Zones must reside within same region as location.
