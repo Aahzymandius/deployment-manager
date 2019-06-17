@@ -37,4 +37,6 @@ resources:
         diskSizeGb: {{ properties["diskSize"] }}
         diskType: /zones/{{ properties["zone"] }}/diskTypes/{{ properties["diskType"] }}
     {% if properties["addDisks"] %}
-    {% for disk in
+    {% for disk in properties["addDisks"] %}
+    - boot: false
+      autoDelete: {{ properties["autoDelete"] }}
