@@ -80,4 +80,7 @@ properties:
   type: array
   description: list of additional disks to add to the instance
   items: objects
-    
+    autoDelete:
+      type: boolean
+      description: True causes the disk to be deleted when the VM is deleted
+      default: false
