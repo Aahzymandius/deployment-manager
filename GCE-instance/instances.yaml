@@ -8,9 +8,19 @@ resources:
     name: test1
     region: us-central1
     zone: us-central1-c
-    network: shared-vpc
-    subnetwork: local-only
     machineType: n1-standard-1
+    networkInterfaces:
+    - network: shared-vpc
+      subnetwork: local-only
+    # natIP:
+    # ptrName:
     tags:
     - bastion
     - web-server
+    autoDelete:
+    #sourceSnapshot:
+    image: 
+    diskSize:
+    diskType:
+    addDisks:
+    - autoDelete:
