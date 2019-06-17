@@ -3,8 +3,81 @@ import:
 
 required:
   - name
+  - region
+  - zone
 
 properties:
   name: 
     type: string
     description: name of the cluster and nodes
+
+  region:
+    type: string
+    description: region where VM and disks will be created
+
+  zone:
+    type: string
+    description: zone where VM is to be created
+
+  machineType:
+    type: strong
+    description: number of cores and amount of memory, can use standard or custom machine types
+    default: n1-standard-1
+
+  networkInterfaces:
+    type: array
+    description: can list multiple interfaces, each one must use a different network. Can't be changed after creation
+    items: objects
+      host-project:
+        type: string
+        description: define the host project id if using shared VPC
+      network:
+        type: string
+        default: default
+      subnetwork:
+        type: string
+        default: default
+      natIP:
+        type: string
+        description: Can assign a previously reserved and currently unused static IP
+      ptrName:
+        type: string
+        description: assign a PTR name for the instance to be used within the project.
+
+  tags:
+    type: array
+    description: network tags to be assigned to the instance, used for routes and firewall rules
+    items: string
+
+  autoDelete:
+    type: boolean
+    description: True causes the boot disk to be deleted when the VM is deleted
+    default: false
+
+  sourceSnapshot:
+    type: string
+    description: Full URL of snapshot to be used to create the boot disk, if used, replaces image.
+
+  image:
+    type: string
+    description: Full URL of image or image family to be used for boot disk, only used if Snapshot is not defined
+    default: 
+
+  diskSize:
+    type: string
+    description: size, in GB of the boot disk
+    default: 10GB
+
+  diskType:
+    type: string
+    description: Choose type of boot disk, HDD or SSD
+    default:
+    enum:
+    - 
+    - 
+
+  addDisks:
+  type: array
+  description: list of additional disks to add to the instance
+  items: objects
+    
