@@ -61,7 +61,7 @@ properties:
   image:
     type: string
     description: Full URL of image or image family to be used for boot disk, only used if Snapshot is not defined
-    default: 
+    default: projects/debian-cloud/global/images/family/debian-9
 
   diskSize:
     type: string
@@ -71,16 +71,56 @@ properties:
   diskType:
     type: string
     description: Choose type of boot disk, HDD or SSD
-    default:
+    default: pd-standard
     enum:
-    - 
-    - 
+    - pd-standard
+    - pd-ssd
 
   addDisks:
   type: array
   description: list of additional disks to add to the instance
   items: objects
-    autoDelete:
-      type: boolean
-      description: True causes the disk to be deleted when the VM is deleted
-      default: false
+    name:
+      type: string
+    size:
+      type: string
+      description: size in GB of the disk
+      default: 100
+    diskType:
+      type: string
+      default: pd-standard
+      enum:
+      - pd-standard
+      - pd-ssd
+    sourceSnapshot:
+      type: string
+      description: Full URL of snapshot to be used to create the boot disk, if used, replaces image.
+    image:
+      type: string
+      description: Full URL of image or image family to be used for boot disk, only used if Snapshot is not defined
+      default: projects/debian-cloud/global/images/family/debian-9
+
+  metadata:
+    type: array
+    items: objects
+      key:
+        type: string
+      value:
+        type: string
+
+  serviceAccount:
+    type: string
+    description: only define if using a custom service account, will use default compute otherwise
+
+  scopes:
+    type: array
+    description: if using default service account, list of APIs the instance is allowed to access
+    items: string
+
+  labels:
+    type: array
+    items: objects
+      key:
+        type: string
+      value:
+        type: string
