@@ -38,4 +38,46 @@ resources:
         diskType: /zones/{{ properties["zone"] }}/diskTypes/{{ properties["diskType"] }}
     {% if properties["addDisks"] %}
     {% for disk in properties["addDisks"] %}
-    - $(ref
+    - $(ref.{{ disk["nam"] }}.selfLink)
+    {% endfor %}
+    {% endif %}
+    metadata:
+      items:
+      - key: enable-oslogin
+        value: {{ properties["osLogin"] }}
+      {% for items in properties["metadata"] %}
+      - key: {{ items["key"] }}
+        value: {{ items["value"] }}
+      {% end for %}
+    serviceAccounts:
+    {% if properties["serviceAccount"] %}
+      email: {{ properties["serviceAccount" }}
+    {% else %}
+      email: {{ env["project"] }}-compute@developer.gserviceaccount.com
+      scopes:
+      {% if properties["scopes"] }}
+      {% for scope in properties["scopes"] %}
+      - {{ scope }}
+      {% endfor %}
+      {% endif %}
+    {% endif %}
+    labels:
+    {% for label in properties["labels"] %}
+    - key: {{ label["key"] }}
+      value: {{ label["value"] }}
+    {% endfor %}
+{% if properties["addDisks"] %}
+{% for disk in properties["addDisks"] %}
+- name: disk-{{ disk["name"] }}
+  type: compute.v1.disk
+  properties:
+    name: {{ disk["name"] }}
+    sizeGb: {{disk["size"] }}
+    type: /zones/{{ properties["zone"] }}/diskTypes/{{ disk["diskType"] }}
+    {% if disk["sourceSnapshot"] %}
+    sourceSnapshot: {{ disk["sourceSnapshot"] }}
+    {% else %}
+    sourceImage: {{ disk["image"] }}
+    {% endif %}
+{% endfor %}
+{% endif %}
