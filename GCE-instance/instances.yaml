@@ -5,22 +5,33 @@ resources:
 - name: instance1
   type: instance.jinja
   properties:
-    name: test1
+    name: 
     region: us-central1
     zone: us-central1-c
-    machineType: n1-standard-1
-    networkInterfaces:
-    - network: shared-vpc
-      subnetwork: local-only
+    #machineType: 
+    #networkInterfaces:
+    #- network: 
+    #  subnetwork:
     # natIP:
     # ptrName:
-    tags:
-    - bastion
-    - web-server
-    autoDelete:
+    #tags:
+    #- 
+    #autoDelete:
     #sourceSnapshot:
-    image: 
-    diskSize:
-    diskType:
-    addDisks:
-    - autoDelete:
+    #image: 
+    #diskSize:
+    #diskType:
+    #addDisks:
+    #- name:
+    #  size:
+    #  diskType:
+    #  sourceSnapshot:
+    #  image:
+    #metadata:
+    #- key:
+    #  value:
+    #serviceAccount:
+    #scopes:
+    #labels:
+    #- key:
+    #  value:
