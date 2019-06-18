@@ -38,5 +38,4 @@ resources:
         diskType: /zones/{{ properties["zone"] }}/diskTypes/{{ properties["diskType"] }}
     {% if properties["addDisks"] %}
     {% for disk in properties["addDisks"] %}
-    - boot: false
-      autoDelete: {{ properties["autoDelete"] }}
+    - $(ref
