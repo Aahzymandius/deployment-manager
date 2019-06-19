@@ -7,30 +7,30 @@ resources:
   properties:
     name: 
     location: 
-    network: 
-    subnetwork:
-    version: 
-    vpc-native: 
-    pod-cidr: 
-    service-cidr: 
-    private-cluster:
-    enablePrivateEndpoint:
-    hosts:
-    - host-name:
-      host-cidr:
-    master-cidr:
-    labels:
-    - key:
-      value:
-    networkPolicy:
-    httpLB:
-    istio:
-    locations:
-    - 
-    nodePools:
-    - name: 
-      initialNodeCount: 
-      minNodeCount: 
-      maxNodeCount: 
-      image:
-      machineType:
+    #network: 
+    #subnetwork:
+    #version: 
+    #vpc-native: 
+    #pod-cidr: 
+    #service-cidr: 
+    #private-cluster:
+    #enablePrivateEndpoint:
+    #hosts:
+    #- host-name:
+    #  host-cidr:
+    #master-cidr:
+    #labels:
+    #- key:
+    #  value:
+    #networkPolicy:
+    #httpLB:
+    #istio:
+    #locations:
+    #- 
+    #nodePools:
+    #- name: 
+    #  initialNodeCount: 
+    #  minNodeCount: 
+    #  maxNodeCount: 
+    #  image:
+    #  machineType
