@@ -28,7 +28,7 @@ properties:
     type: array
     description: can list multiple interfaces, each one must use a different network. Can't be changed after creation
     items: objects
-      host-project:
+      hostProject:
         type: string
         description: define the host project id if using shared VPC
       network:
