@@ -41,7 +41,7 @@ resources:
       {% endif %}
       nodePools:
       {% for pool in properties["nodePools"] %}
-      - source: $(ref.{{ pool["name"] }}.selfLink)
+      - name: {{ pool["name"] }}
       {% endfor %}
       ##Configure how to auth against master endpoint. Disable both will rely on IAM
       masterAuth:
@@ -77,7 +77,7 @@ resources:
 - name: nodePool-{{ pool["name"] }}
   type: gcp-types/container-v1beta1:projects.locations.clusters.nodePools
   properties:
-    parent: projects/{{ env["project"] }}/locations/{{ properties["location"] }}/clusters/{{ properties["name"] }} 
+    parent: $(ref.{{ properties["name"] }}.selfLink)
     nodePool:
       name: {{ pool["name"] }}
       config:
