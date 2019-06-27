@@ -1,5 +1,6 @@
 imports:
 - path: cluster.jinja
+- path: instance.jinja
 
 resources:
 ##Remove the default VPC
@@ -209,34 +210,26 @@ resources:
 
 ##Create a bastion host for the project in the primary network
 - name: bastion
-  type: compute.v1.instance
+  type: instance.jinja
   properties:
-    tags:
-      items:
-      - bastion
-    machineType: zones/us-central1-f/machineTypes/n1-standard-1
-    zone: us-central1-f
-    disks:
-    - boot: true
-      autoDelete: true
-      initializeParams:
-        sourceImage: projects/debian-cloud/global/images/family/debian-9
-        diskSizeGb: 20
+    name: bastion
+    region: us-central
+    zone: us-central1-f 
     networkInterfaces:
-    - subnetwork: $(ref.dublin.selfLink)
-      accessConfigs:
-      - natIP: "$(ref.bastionip.address)"
+    - network: pw-network
+      subnetwork: belfast
+      natIP: $(ref.bastionip.address)
+    tags:
+    - bastion
+    - web-server
+    autoDelete: true
+    addDisks:
+    - name: bastion-1
+      size: "100"
+    osLogin: enabled
     metadata:
-      items:
-      - key: startup-script
-        value: "#! /bin/bash\n\napt-get update\napt-get -y install nmap\napt-get -y install dnsutils\napt-get -y install kubectl\napt-get -y install apache2-utils\napt-get -y install apt-transport-https ca-certificates curl gnupg2 software-properties-common\ncurl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -\nadd-apt-repository 'deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable'\napt-get update\napt-get -y install docker-ce\napt-get -y install unattended-upgrades apt-listchanges"
-      - key: enable-oslogin
-        value: "TRUE"
-      - key: block-project-ssh-keys
-        value: "true"
-  metadata:
-    dependsOn:
-    - bastionip
+    - key: block-project-ssh-keys
+      value: "true"
 
 ##Create the GKE clusters
 - name: sheehy
