@@ -103,7 +103,7 @@ resources:
     type: /zones/{{ properties["zone"] }}/diskTypes/{{ disk["diskType"] }}
     {% if disk["sourceSnapshot"] %}
     sourceSnapshot: {{ disk["sourceSnapshot"] }}
-    {% else %}
+    {% elif disk["image"] %}
     sourceImage: {{ disk["image"] }}
     {% endif %}
 {% endfor %}
