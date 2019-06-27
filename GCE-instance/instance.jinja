@@ -14,8 +14,13 @@ resources:
     zone: {{ properties["zone"] }}
     networkInterfaces:
     {% for eth in properties["networkInterfaces"] %}
-    - network: projects/{{ env["project"] }}/global/networks/{{ eth["network"] }}
+    - {% if eth["hostProject"] %}
+      network: projects/{{ eth["hostProject"] }}/global/networks/{{ eth["network"] }}
+      subnetwork: projects/{{ eth["hostProject"] }}/regions/{{ properties["region"] }}/subnetworks/{{ eth["subnetwork"] }}
+      {% else %}
+      network: projects/{{ env["project"] }}/global/networks/{{ eth["network"] }}
       subnetwork: projects/{{ env["project"] }}/regions/{{ properties["region"] }}/subnetworks/{{ eth["subnetwork"] }}
+      {% endif %}
       {% if eth["natIP"] or eth["ptrName"] %}
       accessConfigs:
         {% if eth["natIP"] %}
