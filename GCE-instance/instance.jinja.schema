@@ -104,10 +104,6 @@ properties:
   osLogin:
     type: string
     description: set to "enabled" to enable osLogin for the VM
-    default: disabled
-    enum:
-    - enabled
-    - disabled
 
   metadata:
     type: array
