@@ -98,6 +98,7 @@ resources:
   type: compute.v1.disk
   properties:
     name: {{ disk["name"] }}
+    zone: {{ properties["zone"] }}
     sizeGb: {{disk["size"] }}
     type: /zones/{{ properties["zone"] }}/diskTypes/{{ disk["diskType"] }}
     {% if disk["sourceSnapshot"] %}
