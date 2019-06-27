@@ -59,7 +59,7 @@ resources:
       {% endif %}
   {% if properties["serviceAccount"] %}
     serviceAccounts:
-    {% if properties["serviceAccount"] == default %}
+    {% if properties["serviceAccount"] == "default" %}
     - email: {{ env["project"] }}-compute@developer.gserviceaccount.com
       scopes:
       {% if properties["scopes"] %}
