@@ -80,26 +80,26 @@ properties:
 
 
   addDisks:
-  type: array
-  items:
-    type: object
-    properties:
-      name:
-        type: string
-      size:
-        type: string
-        description: size in GB of the disk
-      diskType:
-        type: string
-        enum:
-        - pd-standard
-        - pd-ssd
-      sourceSnapshot:
-        type: string
-        description: Full URL of snapshot to be used to create the boot disk, if used, replaces image.
-      image:
-        type: string
-        description: Full URL of image or image family to be used for boot disk, only used if Snapshot is not defined
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+        size:
+          type: string
+          description: size in GB of the disk
+        diskType:
+          type: string
+          enum:
+          - pd-standard
+          - pd-ssd
+        sourceSnapshot:
+          type: string
+          description: Full URL of snapshot to be used to create the boot disk, if used, replaces image.
+        image:
+          type: string
+          description: Full URL of image or image family to be used for boot disk, only used if Snapshot is not defined
 
   metadata:
     type: array
