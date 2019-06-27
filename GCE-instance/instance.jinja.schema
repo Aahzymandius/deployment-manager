@@ -103,11 +103,11 @@ properties:
 
   osLogin:
     type: string
-    description: set to "true" to enable osLogin for the VM
-    default: false
+    description: set to "enabled" to enable osLogin for the VM
+    default: disabled
     enum:
-    - true
-    - false
+    - enabled
+    - disabled
 
   metadata:
     type: array
