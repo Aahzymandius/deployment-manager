@@ -55,7 +55,7 @@ resources:
     {% else %}
       email: {{ env["project"] }}-compute@developer.gserviceaccount.com
       scopes:
-      {% if properties["scopes"] }}
+      {% if properties["scopes"] %}
       {% for scope in properties["scopes"] %}
       - {{ scope }}
       {% endfor %}
