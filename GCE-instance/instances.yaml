@@ -6,14 +6,15 @@ resources:
   type: instance.jinja
   properties:
     name: 
-    region: us-central1
-    zone: us-central1-c
+    region: 
+    zone: 
     #machineType: 
     #networkInterfaces:
-    #- network: 
+    #- hostProject:
+    #  network: 
     #  subnetwork:
-    # natIP:
-    # ptrName:
+    #  natIP:
+    #  ptrName:
     #tags:
     #- 
     #autoDelete:
