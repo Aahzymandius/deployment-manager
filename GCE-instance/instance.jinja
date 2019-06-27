@@ -45,15 +45,19 @@ resources:
       items:
       - key: enable-oslogin
         value: {{ properties["osLogin"] }}
+      {% if properties["metadata"] %}
       {% for items in properties["metadata"] %}
       - key: {{ items["key"] }}
         value: {{ items["value"] }}
       {% endfor %}
+      {% endif %}
     serviceAccounts:
     {% if properties["serviceAccount"] %}
-      email: {{ properties["serviceAccount"] }}
+    - email: {{ properties["serviceAccount"] }}
+      scopes:
+      - https://www.googleapis.com/auth/cloud-platform
     {% else %}
-      email: {{ env["project"] }}-compute@developer.gserviceaccount.com
+    - email: {{ env["project"] }}-compute@developer.gserviceaccount.com
       scopes:
       {% if properties["scopes"] %}
       {% for scope in properties["scopes"] %}
@@ -61,11 +65,13 @@ resources:
       {% endfor %}
       {% endif %}
     {% endif %}
+    {% if properties["labels"] %}
     labels:
     {% for label in properties["labels"] %}
     - key: {{ label["key"] }}
       value: {{ label["value"] }}
     {% endfor %}
+    {% endif %}
 {% if properties["addDisks"] %}
 {% for disk in properties["addDisks"] %}
 - name: disk-{{ disk["name"] }}
