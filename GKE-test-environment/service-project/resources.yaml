@@ -127,3 +127,127 @@ resources:
     - key: block-project-ssh-keys
       value: "true"
 
+- name: cluster1
+  type: cluster.jinja
+  properties:
+    name: standard-cluster-1
+    location: us-central1-a
+    network: local-vpc
+    subnetwork: primary-local
+
+- name: cluster2
+  type: cluster.jinja
+  properties:
+    name: moose
+    location: us-central1-c
+    network: local-vpc
+    subnetwork: primary-local
+    vpc-native: true
+    private-cluster: true
+    hosts:
+    - host-name: bastion
+      host-cidr: $(ref.bastion.networkInterfaces[0].accessConfigs[0].natIP)/32
+    master-cidr: 172.16.64.32/28
+
+- name: cluster3
+  type: cluster.jinja
+  properties:
+    name: hippo
+    location: us-central1
+    network: local-vpc
+    subnetwork: primary-local
+    vpc-native: true
+    pod-cidr: pods
+    service-cidr: services1
+    private-cluster: true
+    hosts:
+    - host-name: bastion
+      host-cidr: $(ref.bastion.networkInterfaces[0].accessConfigs[0].natIP)/32
+    master-cidr: 172.16.64.0/28
+    labels:
+    - key: access-type
+      value: private
+    - key: location-type
+      value: regional
+    nodePools:
+    - name: default
+      initialNodeCount: 1
+
+- name: cluster4
+  type: cluster.jinja
+  properties:
+    name: lion
+    location: us-central1
+    network: local-vpc
+    subnetwork: primary-local
+    vpc-native: true
+    pod-cidr: pods
+    service-cidr: services2
+    labels:
+    - key: access-type
+      value: public
+    - key: location-type
+      value: regional
+    nodePools:
+    - name: default
+      initialNodeCount: 1
+      minNodeCount: 3
+      maxNodeCount: 9
+    - name: big-pods
+      initialNodeCount: 1
+      machineType: n1-standard-2
+
+- name: cluster5
+  type: cluster.jinja
+  properties:
+    name: narwhal
+    location: us-central1-a
+    network: another-vpc
+    subnetwork: not-as-local
+    labels:
+    - key: access-type
+      value: public
+    - key: location-type
+      value: zonal
+    networkPolicy: true
+    httpLB: disabled
+
+- name: cluster6
+  type: cluster.jinja
+  properties:
+    name: zebra
+    location: us-central1-a
+    network: another-vpc
+    subnetwork: not-as-local
+    vpc-native: true
+    pod-cidr: pods
+    service-cidr: services
+    labels:
+    - key: location-type
+      value: zonal
+    - key: access-type
+      value: public
+
+- name: cluster7
+  type: cluster.jinja
+  properties:
+    name: mongoose
+    location: us-central1-a
+    network: shared-vpc
+    subnetwork: clusters
+    vpc-native: true
+    pod-cidr: pods
+    service-cidr: service1
+    private-cluster: true
+    master-cidr: 172.16.63.0/28
+    httpLB: disabled
+    labels:
+    - key: access-type
+      value: private
+    - key: location-type
+      value: zonal
+    nodePools:
+    - name: weird-mammal
+      initialNodeCount: 2
+      minNodeCount: 1
+      maxNodeCount: 4
