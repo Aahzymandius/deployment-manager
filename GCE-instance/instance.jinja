@@ -57,20 +57,29 @@ resources:
         value: {{ items["value"] }}
       {% endfor %}
       {% endif %}
+  {% if properties["serviceAccount"] %}
     serviceAccounts:
-    {% if properties["serviceAccount"] %}
-    - email: {{ properties["serviceAccount"] }}
-      scopes:
-      - https://www.googleapis.com/auth/cloud-platform
-    {% else %}
+    {% if properties["serviceAccount"] == default %}
     - email: {{ env["project"] }}-compute@developer.gserviceaccount.com
       scopes:
       {% if properties["scopes"] %}
       {% for scope in properties["scopes"] %}
-      - {{ scope }}
+      - https://www.googleapis.com/auth/{{ scope }}
       {% endfor %}
+      {% else %}
+      - https://www.googleapis.com/auth/devstorage.read_only
+      - https://www.googleapis.com/auth/logging.write
+      - https://www.googleapis.com/auth/monitoring.write
+      - https://www.googleapis.com/auth/servicecontrol
+      - https://www.googleapis.com/auth/service.management.readonly
+      - https://www.googleapis.com/auth/trace.append
       {% endif %}
+    {% else %}
+    - email: {{ properties["serviceAccount"] }}
+      scopes:
+      - https://www.googleapis.com/auth/cloud-platform
     {% endif %}
+  {% endif %}
     {% if properties["labels"] %}
     labels:
     {% for label in properties["labels"] %}
