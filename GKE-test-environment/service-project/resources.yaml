@@ -1,3 +1,7 @@
+imports:
+- path: instance.jinja
+- path: cluster.jinja
+
 resources:
 - name: firewall1
   action: gcp-types/compute-v1:compute.firewalls.delete
@@ -103,3 +107,23 @@ resources:
   metadata:
     runTimePolicy:
     - CREATE
+
+- name: instance1
+  type: instance.jinja
+  properties:
+    name: bastion
+    region: us-central1
+    zone: us-central1-c
+    networkInterfaces:
+    ##UPDATE WITH HOST PROJECT ID
+    - hostProject: [host-project-ID]
+      network: shared-vpc
+      subnetwork: clusters
+    tags:
+    - bastion
+    autoDelete: true
+    osLogin: enabled
+    metadata:
+    - key: block-project-ssh-keys
+      value: "true"
+
