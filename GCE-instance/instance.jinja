@@ -16,6 +16,7 @@ resources:
     {% for eth in properties["networkInterfaces"] %}
     - network: projects/{{ env["project"] }}/global/networks/{{ eth["network"] }}
       subnetwork: projects/{{ env["project"] }}/regions/{{ properties["region"] }}/subnetworks/{{ eth["subnetwork"] }}
+      {% if eth["natIP"] or eth["ptrName"] %}
       accessConfigs:
         {% if eth["natIP"] %}
         natIP: {{ eth["natIP"] }}
@@ -24,6 +25,7 @@ resources:
         setPublicPtr: true
         publicPtrDomainName: {{ eth["ptrName"] }}
         {% endif %}
+      {% endif %}
     {% endfor %}
     disks:
     - boot: true
