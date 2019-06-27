@@ -101,6 +101,14 @@ properties:
           type: string
           description: Full URL of image or image family to be used for boot disk, only used if Snapshot is not defined
 
+  osLogin:
+    type: string
+    description: set to "true" to enable osLogin for the VM
+    default: false
+    enum:
+    - true
+    - false
+
   metadata:
     type: array
     items:
