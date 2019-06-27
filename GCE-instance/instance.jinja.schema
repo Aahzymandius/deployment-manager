@@ -121,7 +121,7 @@ properties:
 
   scopes:
     type: array
-    description: if using default service account, list of APIs the instance is allowed to access
+    description: if using default service account, list of scopes fpr the instance. Leave blank for default
     items: 
       type: string
 
