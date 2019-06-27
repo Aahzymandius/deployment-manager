@@ -44,7 +44,11 @@ resources:
     metadata:
       items:
       - key: enable-oslogin
-        value: {{ properties["osLogin"] }}
+        {% if properties["osLogin"] %}
+        value: "true"
+        {% else %}
+        value: "false"
+        {% endif %}
       {% if properties["metadata"] %}
       {% for items in properties["metadata"] %}
       - key: {{ items["key"] }}
