@@ -1,3 +1,6 @@
+imports:
+- path: instance.jinja
+
 resources:
 #Remove default VPC
 - name: firewall1
@@ -113,3 +116,16 @@ resources:
   metadata:
     runTimePolicy:
   	- CREATE
+
+- name: instance1
+  type: instance.jinja
+  properties:
+    name: webserver
+    region: us-central1
+    zone: us-central1-f
+    networkInterfaces:
+    - network: shared-vpc
+      subnetwork: local-only
+    tags:
+    - web-server
+    autoDelete: true
