@@ -27,6 +27,7 @@ resources:
     #  diskType:
     #  sourceSnapshot:
     #  image:
+    #osLogin:
     #metadata:
     #- key:
     #  value:
