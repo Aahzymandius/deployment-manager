@@ -79,7 +79,6 @@ properties:
   networkPolicy:
     type: boolean
     description: true enables calico CNI for network policy in cluster
-    default: false
 
   httpLB:
     type: boolean
