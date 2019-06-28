@@ -1,0 +1,9 @@
+imports:
+- path: peering.jinja
+
+resources:
+- name: peering
+  type: peering.jinja
+  properties:
+    net1:
+    net2:
