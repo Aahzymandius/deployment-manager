@@ -2,6 +2,7 @@ imports:
 - path: cluster.jinja
 - path: instance.jinja
 - path: remove-default-vpc.jinja
+- path: peering.jinja
 
 resources:
 ##Remove the default VPC
@@ -43,33 +44,13 @@ resources:
     network: $(ref.pw-net-2.selfLink)
     ipCidrRange: 192.168.4.0/24
     region: us-central1
+
 ##Peer first two networks
-- name: addPeering-1-2
-  action: gcp-types/compute-v1:compute.networks.addPeering
+- name: peering
+  type: peering.jinja
   properties:
-    network: pw-net-1
-    name: peering-1-2
-    autoCreateRoutes: true
-    peerNetwork: $(ref.pw-net-2.selfLink)
-  metadata:
-    dependsOn:
-    - pw-net-1
-    - pw-net-2
-    runTimePolicy:
-    - CREATE
-- name: addPeering-2-1
-  action: gcp-types/compute-v1:compute.networks.addPeering
-  properties:
-    network: pw-net-2
-    name: peering-2-1
-    autoCreateRoutes: true
-    peerNetwork: $(ref.pw-net-1.selfLink)
-    metadata:
-      dependsOn:
-      - pw-net-1
-      - pw-net-2
-      runTimePolicy:
-      - CREATE
+    net1: pw-net-1
+    net2: pw-net-2
 
 ##Create priamry working network and subnets
 - name: pw-network
