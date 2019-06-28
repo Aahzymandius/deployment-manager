@@ -1,38 +1,11 @@
 imports:
 - path: instance.jinja
+- path: remove-default-vpc.jinja
 
 resources:
 #Remove default VPC
-- name: firewall1
-  action: gcp-types/compute-v1:compute.firewalls.delete
-  properties:
-    firewall: default-allow-icmp
-    network: default
-- name: firewall2
-  action: gcp-types/compute-v1:compute.firewalls.delete
-  properties:
-    firewall: default-allow-internal
-    network: default
-- name: firewall3
-  action: gcp-types/compute-v1:compute.firewalls.delete
-  properties:
-    firewall: default-allow-ssh
-    network: default
-- name: firewall4
-  action: gcp-types/compute-v1:compute.firewalls.delete
-  properties:
-    firewall: default-allow-rdp
-    network: default   
-- name: default
-  action: gcp-types/compute-v1:compute.networks.delete
-  properties:
-    network: default
-  metadata:
-    dependsOn:
-    - firewall1
-    - firewall2
-    - firewall3
-    - firewall4
+- name: remove-default-vpc
+  type: remove-default-vpc.jinja
 
 #Create new VPC and subnets
 - name: shared-vpc
@@ -109,13 +82,13 @@ resources:
   action: gcp-types/compute-v1:compute.networks.addPeering
   properties:
     network: another-vpc
-	  name: shared-vpc-peering
-	  autoCreateRoutes: true
+    name: shared-vpc-peering
+    autoCreateRoutes: true
   ## MAKE SURE TO REPLACE WITH THE SERVICE VPC PROJECT ID
-	  peerNetwork: projects/[service-project-id]/global/networks/another-vpc
+    peerNetwork: projects/[service-project-id]/global/networks/another-vpc
   metadata:
     runTimePolicy:
-  	- CREATE
+    - CREATE
 
 - name: instance1
   type: instance.jinja
