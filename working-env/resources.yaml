@@ -10,46 +10,49 @@ resources:
   type: remove-default-vpc.jinja
 
 ##Create first network with subnets
-- name: pw-net-1
+- name: pw-net
   type: compute.v1.network
   properties: 
     autoCreateSubnetworks: false
 - name: london
   type: compute.v1.subnetwork
   properties:
-    network: $(ref.pw-net-1.selfLink) 
-    ipCidrRange: 192.168.0.0/24
+    network: $(ref.pw-net.selfLink) 
+    ipCidrRange: 192.168.100.0/24
     region: us-central1
+    secondaryIpRanges:
+      - rangeName: pod-cidr
+        ipCidrRange: 10.128.0.0/16
+      - rangeName: service-cidr
+        ipCidrRange: 10.131.0.0/24
 - name: york
   type: compute.v1.subnetwork
   properties:
-    network: $(ref.pw-net-1.selfLink)
-    ipCidrRange: 192.168.1.0/24
-    region: us-central1
-##Second network with subnets
-- name: pw-net-2
-  type: compute.v1.network
-  properties: 
-    autoCreateSubnetworks: false
+    network: $(ref.pw-net.selfLink)
+    ipCidrRange: 192.168.102.0/24
+    region: us-east1
+    secondaryIpRanges:
+      - rangeName: pod-cidr
+        ipCidrRange: 10.129.0.0/16
+      - rangeName: service-cidr
+        ipCidrRange: 10.131.1.0/24
 - name: brighton
   type: compute.v1.subnetwork
   properties:
-    network: $(ref.pw-net-2.selfLink) 
-    ipCidrRange: 192.168.3.0/24
-    region: us-central1
+    network: $(ref.pw-net.selfLink) 
+    ipCidrRange: 192.168.104.0/24
+    region: us-west1
+    secondaryIpRanges:
+      - rangeName: pod-cidr
+        ipCidrRange: 10.130.0.0/16
+      - rangeName: service-cidr
+        ipCidrRange: 10.131.2.0/24
 - name: wellington
   type: compute.v1.subnetwork
   properties:
-    network: $(ref.pw-net-2.selfLink)
-    ipCidrRange: 192.168.4.0/24
+    network: $(ref.pw-net.selfLink)
+    ipCidrRange: 192.168.106.0/24
     region: us-central1
-
-##Peer first two networks
-- name: peering
-  type: peering.jinja
-  properties:
-    net1: pw-net-1
-    net2: pw-net-2
 
 ##Create priamry working network and subnets
 - name: pw-network
@@ -75,9 +78,11 @@ resources:
     region: us-central1
     secondaryIpRanges:
       - rangeName: pod-cidr
-        ipCidrRange: 10.52.0.0/14
-      - rangeName: service-cidr
-        ipCidrRange: 10.242.16.0/20
+        ipCidrRange: 10.0.0.0/16
+      - rangeName: service-cidr-1
+        ipCidrRange: 10.10.0.0/24
+      - rangeName: service-cidr-2
+        ipCidrRange: 10.10.1.0/24
 - name: cork
   type: compute.v1.subnetwork
   properties:
@@ -144,6 +149,14 @@ resources:
     - 192.168.0.0/16
     allowed:
     - IPProtocol: all
+
+
+##Peer first two networks
+- name: peering
+  type: peering.jinja
+  properties:
+    net1: pw-net
+    net2: pw-network
     
 ##Create static IPs    
 - name: mysite-ing
