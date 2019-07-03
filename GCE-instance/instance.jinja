@@ -59,7 +59,7 @@ resources:
       {% if properties["metadata"] %}
       {% for items in properties["metadata"] %}
       - key: {{ items["key"] }}
-        value: {{ items["value"] }}
+        value: '{{ items["value"] }}'
       {% endfor %}
       {% endif %}
   {% if properties["serviceAccount"] %}
