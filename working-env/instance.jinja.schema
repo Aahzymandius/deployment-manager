@@ -105,16 +105,6 @@ properties:
     type: string
     description: set to "enabled" to enable osLogin for the VM
 
-  metadata:
-    type: array
-    items:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: string
-
   serviceAccount:
     type: string
     description: only define if using a custom service account, will use default compute otherwise
@@ -124,13 +114,3 @@ properties:
     description: if using default service account, list of scopes fpr the instance. Leave blank for default
     items: 
       type: string
-
-  labels:
-    type: array
-    items:
-      type: object
-      properties:
-        key:
-          type: string
-        value:
-          type: string
