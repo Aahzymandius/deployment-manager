@@ -53,6 +53,16 @@ resources:
     network: $(ref.pw-net.selfLink)
     ipCidrRange: 192.168.106.0/24
     region: us-central1
+- name: allow-internal-net
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.pw-net.selfLink)
+    priority: 1000
+    direction: INGRESS
+    sourceRanges:
+    - 192.168.0.0/16
+    allowed:
+    - IPProtocol: all
 
 ##Create priamry working network and subnets
 - name: pw-network
@@ -231,7 +241,7 @@ resources:
   properties:
     name: gallagher
     location: us-central1-f
-    network: pw-net-1
+    network: pw-net
     subnetwork: london
     version: [choose 1 minor version behind current release]
     labels:
