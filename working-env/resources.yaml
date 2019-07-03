@@ -107,7 +107,6 @@ resources:
     - key: location-type 
       value: zonal
     networkPolicy: true
-    httpLB:
     istio: true
     locations:
     - us-central1-a
