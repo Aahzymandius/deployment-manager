@@ -1,0 +1,31 @@
+resources:
+{% if properties['namespace'] != 'default' %}
+- name: namespace-{{ properties['name'] }}
+  type: {{ env['project'] }}/kubernetes-v1:/api/v1/namespaces/{{properties['namespace'] }}/namespaces
+  properties:
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: {{ properties['namespace'] }}
+{% endif%}
+- name: service-{{ properties['name'] }}
+  type: {{ env['project'] }}/kubernetes-v1:/api/v1/namespaces/{{properties['namespace'] }}/services
+  properties:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{ properties['name'] }}
+      namespace: {{ properties['namespace'] }}
+      {% if properties['annotations'] %}
+      annotations:
+        {% if properties.annotations['internal'] %}
+        cloud.google.com/load-balancer-type: "Internal"
+        {% endif %}
+        {% if properties.annotations['neg'] %}
+        cloud.google.com/neg: '{"ingress": true}'
+        {% endif %}
+      {% endif %}
+    spec:
+      
+        
+      

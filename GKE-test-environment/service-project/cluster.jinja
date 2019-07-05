@@ -56,12 +56,6 @@ resources:
       - {{ zone }}
       {% endfor %}
       {% endif %}
-      {% if properties["labels"] %}
-      resourceLabels:
-        {% for label in ["labels"] %}
-        {{ label["key"] }}: {{ label["value"] }}
-        {% endfor %}
-      {% endif %}
       addonsConfig:
         kubernetesDashboard:
           disabled: true
