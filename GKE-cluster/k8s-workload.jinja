@@ -1,0 +1,97 @@
+resources:
+{% if properties['namespace'] != 'default' %}
+- name: namespace-{{ properties['name'] }}
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/v1/namespaces/{{ properties['namespace'] }}/namespaces
+  properties:
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: {{ properties['namespace'] }}
+{% endif%}
+- name: service-{{ properties['name'] }}
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/v1/namespaces/{{properties['namespace'] }}/services
+  properties:
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{ properties['name'] }}
+      namespace: {{ properties['namespace'] }}
+      {% if properties['annotations'] %}
+      annotations:
+        {% if properties.annotations['internal'] %}
+        cloud.google.com/load-balancer-type: "Internal"
+        {% endif %}
+        {% if properties.annotations['neg'] %}
+        cloud.google.com/neg: '{"ingress": true}'
+        {% endif %}
+      {% endif %}
+    spec:
+      {% if propreties['trafficPolicy'] %}
+      externalTrafficPolicy: {{ properties['trafficPolicy'] }}
+      {% endif %}
+      {% if properties['loadBalancerIP'] %}
+      loadBalancerIP: {{ properties['loadBalancerIP'] }}
+      {% endif %}
+      type: {{ properties['type'] }}
+      ports:
+      - {% if properties['servicePort'] %}
+        port: {{ properties['servicePort'] }}
+        {% else %}
+        port: {{ properties['containerPort'] }}
+        {% endif %}
+        targetPort: {{ properties['containerPort'] }}
+      selector:
+        {% for label in properties['labels'] %}
+        {{ label }}
+        {% endfor %}
+- name: deploy-{{ properties['name'] }}
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/apps/v1/namespaces/{{ properties['namespace'] }}/deployments
+  properties:
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: {{ properties['name'] }}
+      namespace: {{ properties['namespace'] }}
+      labels:
+        {% for label in properties['labels'] %}
+        {{ label }}
+        {% endfor %}
+    spec:
+      replicas: {{ properties['replicas'] }}
+      selector:
+        matchLabels:
+        {% for label in properties['labels'] %}
+          {{ label }}
+        {% endfor %}
+      strategy:
+        rollingUpdate:
+          maxSurge: {{ properties['maxSurge'] }}
+          maxUnavailable: {{ properties[maxUnavailable'] }}
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            {% for label in properties['labels'] %}
+            {{ label }}
+            {% endfor %}
+        spec:
+          containers:
+          - name: {{ properties['name'] }}
+            image: {{ properties['image'] }}
+            imagePullPolicy: IfNotPresent
+            ports:
+            - containerPort: {{ properties['containerPort'] }}
+              protocol: TCP
+            resources:
+              {% if properties['cpuLimit'] OR properties['memoryLimit'] %}
+              limits:
+                cpu: {{ proprties['cpuLimit'] }}
+                memory: {{ properties['memoryLimit'] }}
+              {% endif %}
+              requests:
+                cpu: {{ properties['cpuRequest'] }}
+                memory: {{ properties['memoryRequest'] }}
+            readinessProbe:
+              httpGet:
+                path: /
+                port: {{ properties['containerPort'] }}

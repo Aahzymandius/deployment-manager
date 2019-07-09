@@ -4,6 +4,7 @@ def GenerateConfig(context):
   endpoints = {
       '-v1': 'api/v1',
       '-v1beta1-apps': 'apis/apps/v1beta1',
+      '-v1-apps': 'apis/apps/v1',
       '-v1beta1-extensions': 'apis/extensions/v1beta1'
   }
 
@@ -12,7 +13,7 @@ def GenerateConfig(context):
 
   for type_suffix, endpoint in endpoints.iteritems():
     resources.append({
-        'name': 'kubernetes' + type_suffix,
+        'name': context.properties['cluster'] + type_suffix,
         'type': 'deploymentmanager.v2beta.typeProvider',
         'properties': {
             'options': {
