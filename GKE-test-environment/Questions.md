@@ -30,7 +30,7 @@
 
 6. There is a service called “webserver”, I have tested the pod internally and I am confident that the pod is serving traffic properly. Why doesn’t the Load Balancer seem to work?
 
-7. There is a service called “nginx”, I have tested the pod internally and I am confident that the pod is serving traffic properly. Why doesn’t the Load Balancer seem to work?
+7. There is a service called “nginx” in the hippo cluster, I have tested the pod internally and I am confident that the pod is serving traffic properly. Why doesn’t the Load Balancer seem to work?
 
 8. I created an ingress for my nginx workload since the service load balancer is not working. Why isn’t my ingress working?
 
