@@ -222,6 +222,7 @@ resources:
       value: zonal
     nodePools:
     - name: weird-mammal
-      initialNodeCount: 2
+      initialNodeCount: 4
+      machineType: n1-highcpu-4
       minNodeCount: 1
       maxNodeCount: 4
