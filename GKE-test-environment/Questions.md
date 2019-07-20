@@ -12,7 +12,7 @@
 
 6. I have enabled autoscaling in my lion cluster, but my “bigjob” deployment still has unschedulable pods, why isn’t autoscaling working?
 
-7. In my “narwhal” cluster, I can’t reach my internal database which is located in another subnet on my shared VPC. **Note: I am able to reach my internal DB from my bastion VM**
+7. In my “narwhal” cluster, I can’t reach my internal database from my `api` which is located in another subnet on my shared VPC. I don't have this problem with my `fab-four` pods or my bastion host.
 
 8. Autoscaling is enabled on the “mongoose” cluster. There are multiple nodes with under 50% resource usage, why won’t it scale down?
 
