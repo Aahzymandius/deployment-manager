@@ -4,9 +4,9 @@
 
 2. Why did the `moose` cluster fail to be created? How can I prevent this from happening with a new cluster?
 
-3. My `zebra` cluster worked fine with 2 nodes, I need to add one but it won’t work, why?
+3. My `hippo` cluster worked fine with 2 nodes, I need to add one but it won’t work, why?
 
-4. kubectl commands from the bastion VM to the `hippo` cluster are timing out, this works fine from another VM in another project called `Lampy`. Why do the requests from bastion timeout? 
+4. kubectl commands from my workstation to the `hippo` cluster are timing out, this works fine from the `bastion` VM I have setup. Why do the requests from workstations timeout? 
 
 5. I want to manage my `mongoose` cluster from my `narwhal` cluster but the kubectl commands keep failing. Why do my kubectl commands keep timing out? It works fine from my `bastion` VM.
 

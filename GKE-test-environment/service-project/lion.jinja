@@ -1,0 +1,148 @@
+resources:
+- name: namespace-bigjob
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/v1/namespaces/default/namespaces
+  properties:
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: bigjob
+- name: service-
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/v1/namespaces/bigjob/services
+  properties:
+- name: deploy-bigjob
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/apps/v1/namespaces/bigjob/deployments
+  properties:
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: bigjob
+      namespace: bigjob
+    spec:
+      replicas: 5
+      selector:
+        matchLabels:
+          app: bigjob
+      template:
+        metadata:
+          labels:
+            app: bigjob
+        spec:
+          containers:
+          - name: bigjob
+            image: wordpress
+            resources:
+              requests:
+                cpu: 1500m 
+- name: deploy-bigjob
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/apps/v1/namespaces/bigjob/deployments
+  properties:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: job
+  labels:
+    app: job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: job
+  template:
+    metadata:
+      labels:
+        app: job
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+
+- name: namespace-working
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/v1/namespaces/default/namespaces
+  properties:
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: working
+- name: deploy-bigjob
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/apps/v1/namespaces/bigjob/deployments
+  properties:
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: working
+  namespace: working
+  labels:
+    app: working
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: working
+  template:
+    metadata:
+      labels:
+        app: working
+    spec:
+      containers:
+      - name: working
+        image: jazzdd/alpine-flask:python3
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /probe/ready
+            port: 80
+- name: deploy-bigjob
+  type: {{ env['project'] }}/{{ properties['cluster'] }}-v1:/api/apps/v1/namespaces/bigjob/deployments
+  properties:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: working1
+  namespace: working
+  labels:
+    app: working
+    version: 2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: working
+      version: 2
+  template:
+    metadata:
+      labels:
+        app: working
+        version: 2
+    spec:
+      containers:
+      - name: working
+        image: httpd
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: working
+  namespace: working
+spec:
+  type: NodePort
+  selector:
+    app: working
+  ports:
+  - port: 8080
+    targetPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: working
+  namespace: working
+spec:
+  backend:
+    serviceName: working
+    servicePort: 8080

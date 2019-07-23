@@ -12,7 +12,7 @@ def GenerateConfig(context):
 
   for type_suffix, endpoint in endpoints.iteritems():
     resources.append({
-        'name': 'kubernetes' + type_suffix,
+        'name': context.properties['name'] + type_suffix,
         'type': 'deploymentmanager.v2beta.typeProvider',
         'properties': {
             'options': {
