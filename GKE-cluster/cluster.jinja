@@ -42,39 +42,6 @@ resources:
       nodePools:
       {% for pool in properties["nodePools"] %}
       - name: {{ pool["name"] }}
-      {% endfor %}
-      ##Configure how to auth against master endpoint. Disable both will rely on IAM
-      masterAuth:
-        clientCertificateConfig:
-          issueClientCertificate: false
-        username: ""
-      loggingService: logging.googleapis.com/kubernetes
-      monitoringService: monitoring.googleapis.com/kubernetes
-      {% if properties["locations"] %}
-      locations:
-      {% for zone in properties["locations"] %}
-      - {{ zone }}
-      {% endfor %}
-      {% endif %}
-      addonsConfig:
-        kubernetesDashboard:
-          disabled: true
-        httpLoadBalancing:
-          disabled: {{ properties["httpLB"] }}
-        istioConfig:
-          disabled: {{ properties["istio"] }}
-        {% if properties["networkPolicy"] %}
-        networkPolicyConfig:
-          disabled: false
-        {% endif %}
-{% for pool in properties["nodePools"] %}
-- name: nodePool-{{ pool["name"] }}
-  type: gcp-types/container-v1beta1:projects.locations.clusters.nodePools
-  properties:
-    parent: $(ref.{{ properties["name"] }}.selfLink)
-    nodePool:
-      name: {{ pool["name"] }}
-      config:
         initialNodeCount: {{ pool["initialNodeCount"] }}
         {% if pool["minNodeCount"] %}
         autoscaling:
@@ -105,4 +72,28 @@ resources:
           - https://www.googleapis.com/auth/servicecontrol
           - https://www.googleapis.com/auth/service.management.readonly
           - https://www.googleapis.com/auth/trace.append
-{% endfor %}
+      {% endfor %}
+      ##Configure how to auth against master endpoint. Disable both will rely on IAM
+      masterAuth:
+        clientCertificateConfig:
+          issueClientCertificate: false
+        username: ""
+      loggingService: logging.googleapis.com/kubernetes
+      monitoringService: monitoring.googleapis.com/kubernetes
+      {% if properties["locations"] %}
+      locations:
+      {% for zone in properties["locations"] %}
+      - {{ zone }}
+      {% endfor %}
+      {% endif %}
+      addonsConfig:
+        kubernetesDashboard:
+          disabled: true
+        httpLoadBalancing:
+          disabled: {{ properties["httpLB"] }}
+        istioConfig:
+          disabled: {{ properties["istio"] }}
+        {% if properties["networkPolicy"] %}
+        networkPolicyConfig:
+          disabled: false
+        {% endif %}

@@ -2,6 +2,11 @@ imports:
 - path: instance.jinja
 - path: cluster.jinja
 - path: remove-default-vpc.jinja
+- path: k8s-type.py
+- path: hippo.jinja
+- path: lion.jinja
+- path: narwhal.jinja
+- path: mongoose.jinja
 
 resources:
 - name: firewall1
@@ -22,11 +27,11 @@ resources:
       - rangeName: pods
         ipCidrRange: 10.0.0.0/8
       - rangeName: services1
-        ipCidrRange: 172.16.0.0/20
+        ipCidrRange: 172.16.0.0/23
       - rangeName: services2
         ipCidrRange: 172.16.16.0/20
-      - rangeName: services3
-        ipCidrRange: 172.16.32.0/20
+      - rangeName: pods1
+        ipCidrRange: 172.16.2.0/23
       - rangeName: services4
         ipCidrRange: 172.16.48.0/20
 - name: allow-internal
@@ -69,6 +74,26 @@ resources:
     - 10.0.0.0/8
     allowed:
     - IPProtocol: all
+- name: bastion-ssh
+  type: compute.v1.firewall
+  properties:
+    network: $(ref.pw-network.selfLink)
+    priority: 1000
+    direction: INGRESS
+    sourceRanges: 
+    - 0.0.0.0/0
+    targetTags:
+    - bastion
+    allowed:
+    - IPProtocol: TCP
+      ports: 
+      - 22
+
+- name: bastionip
+  type: compute.v1.addresses
+  properties:
+    addressType: EXTERNAL
+    region: us-central1
 
 - name: addPeering
   action: gcp-types/compute-v1:compute.networks.addPeering
@@ -89,10 +114,9 @@ resources:
     region: us-central1
     zone: us-central1-c
     networkInterfaces:
-    ##UPDATE WITH HOST PROJECT ID
-    - hostProject: [host-project-ID]
-      network: shared-vpc
-      subnetwork: clusters
+    - network: another-vpc
+      subnetwork: not-as-local
+      natIP: $(ref.bastionip.address)
     tags:
     - bastion
     autoDelete: true
@@ -120,7 +144,7 @@ resources:
     private-cluster: true
     hosts:
     - host-name: bastion
-      host-cidr: $(ref.bastion.networkInterfaces[0].accessConfigs[0].natIP)/32
+      host-cidr: $(ref.bastionip.address)/32
     master-cidr: 172.16.64.32/28
 
 - name: cluster3
@@ -131,21 +155,30 @@ resources:
     network: local-vpc
     subnetwork: primary-local
     vpc-native: true
-    pod-cidr: pods
+    pod-cidr: pods1
     service-cidr: services1
     private-cluster: true
     hosts:
     - host-name: bastion
-      host-cidr: $(ref.bastion.networkInterfaces[0].accessConfigs[0].natIP)/32
+      host-cidr: $(ref.bastionip.address)/32
     master-cidr: 172.16.64.0/28
-    labels:
-    - key: access-type
-      value: private
-    - key: location-type
-      value: regional
     nodePools:
     - name: default
       initialNodeCount: 1
+      machineType: n1-standard-2
+- name: k8s-hippo
+  type: k8s-type.py
+  properties:
+    cluster: hippo
+    endpoint: $(ref.hippo.endpoint)
+- name: hippo-workloads
+  type: hippo.jinja
+  metadata:
+    dependsOn:
+    - hippo-v1
+    - hippo-v1-apps
+  properties:
+    cluster: hippo
 
 - name: cluster4
   type: cluster.jinja
@@ -157,11 +190,6 @@ resources:
     vpc-native: true
     pod-cidr: pods
     service-cidr: services2
-    labels:
-    - key: access-type
-      value: public
-    - key: location-type
-      value: regional
     nodePools:
     - name: default
       initialNodeCount: 1
@@ -170,6 +198,20 @@ resources:
     - name: big-pods
       initialNodeCount: 1
       machineType: n1-standard-2
+- name: k8s-lion
+  type: k8s-type.py
+  properties:
+    cluster: lion
+    endpoint: $(ref.cluster4.endpoint)
+- name: lion-worlkloads
+  type: lion.jinja
+  properties:
+    cluster: lion
+  metadata:
+    dependsOn:
+    - lion-v1
+    - lion-v1-apps
+    - lion-v1beta1-extensions
 
 - name: cluster5
   type: cluster.jinja
@@ -178,29 +220,38 @@ resources:
     location: us-central1-a
     network: another-vpc
     subnetwork: not-as-local
-    labels:
-    - key: access-type
-      value: public
-    - key: location-type
-      value: zonal
     networkPolicy: true
     httpLB: disabled
-
-- name: cluster6
-  type: cluster.jinja
+    nodePools:
+    - name: unicorn-of-the-sea
+- name: k8s-narwhal
+  type: k8s-type.py
   properties:
-    name: zebra
-    location: us-central1-a
-    network: another-vpc
-    subnetwork: not-as-local
-    vpc-native: true
-    pod-cidr: pods
-    service-cidr: services
-    labels:
-    - key: location-type
-      value: zonal
-    - key: access-type
-      value: public
+    cluster: narwhal
+    endpoint: $(ref.cluster5.endpoint)
+- name: narwhal-workloads
+  type: narwhal.jinja
+  properties:
+    cluster: narwhal
+  metadata:
+    dependsOn:
+    - narwhal-v1
+    - narwhal-v1-apps
+
+#- name: cluster6
+#  type: cluster.jinja
+#  properties:
+#    name: zebra
+#    location: us-central1-a
+#    network: another-vpc
+#    subnetwork: not-as-local
+#    vpc-native: true
+#    pod-cidr: pods
+#    service-cidr: services
+#- name: k8s-zebra
+#  type: k8s-type.py
+#  properties:
+#    endpoint: $(ref.cluster6.endpoint)
 
 - name: cluster7
   type: cluster.jinja
@@ -215,14 +266,22 @@ resources:
     private-cluster: true
     master-cidr: 172.16.63.0/28
     httpLB: disabled
-    labels:
-    - key: access-type
-      value: private
-    - key: location-type
-      value: zonal
     nodePools:
     - name: weird-mammal
       initialNodeCount: 4
       machineType: n1-highcpu-4
       minNodeCount: 1
       maxNodeCount: 4
+- name: k8s-mongoose
+  type: k8s-type.py
+  properties:
+    cluster: mongoose
+    endpoint: $(ref.cluster7.endpoint)
+- name: mongoose-workloads
+  type: mongoose.jinja
+  properties:
+    cluster: mongoose
+  metadata:
+    dependsOn:
+    - mongoose-v1
+    - mongoose-v1-apps

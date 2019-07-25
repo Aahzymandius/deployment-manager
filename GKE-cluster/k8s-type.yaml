@@ -1,0 +1,9 @@
+imports:
+- path: k8s-type.py
+
+resources:
+- name: k8s-types
+  type: k8s-type.py
+  properties:
+    endpoint: 35.225.2.106
+    cluster: narwhal  

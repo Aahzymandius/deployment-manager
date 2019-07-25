@@ -1,0 +1,28 @@
+imports:
+- path: k8s-workload.jinja
+
+resources:
+- name: workload1
+  type: k8s-workload.jinja
+  properties:
+    cluster: narwhal
+    name: test
+    image: nginx 
+    replicas: 2
+    maxSurge: 1
+    maxUnavailable: 1
+    namespace: test
+    type: nodePort
+    #annotations:
+    #  internal:
+    #  neg:
+    labels:
+    - 'app: test'
+    trafficPolicy: local 
+    #loadBalancerIP: 
+    #servicePort: 
+    containerPort: 80
+    #cpuLimit: 
+    #memoryLimit: 
+    cpuRequest: 100m
+    memoryRequest:  50Mi
