@@ -169,12 +169,16 @@ resources:
 - name: k8s-hippo
   type: k8s-type.py
   properties:
-    name: hippo
-    endpoint: $(ref.cluster3.endpoint)
+    cluster: hippo
+    endpoint: $(ref.hippo.endpoint)
 - name: hippo-workloads
   type: hippo.jinja
+  metadata:
+    dependsOn:
+    - hippo-v1
+    - hippo-v1-apps
   properties:
-    name: $(ref.k8s-hippo.name)
+    cluster: hippo
 
 - name: cluster4
   type: cluster.jinja
@@ -197,15 +201,17 @@ resources:
 - name: k8s-lion
   type: k8s-type.py
   properties:
-    name: lion
+    cluster: lion
     endpoint: $(ref.cluster4.endpoint)
 - name: lion-worlkloads
   type: lion.jinja
   properties:
-    name: lion
+    cluster: lion
   metadata:
     dependsOn:
-    - k8s-lion
+    - lion-v1
+    - lion-v1-apps
+    - lion-v1beta1-extensions
 
 - name: cluster5
   type: cluster.jinja
@@ -216,18 +222,21 @@ resources:
     subnetwork: not-as-local
     networkPolicy: true
     httpLB: disabled
+    nodePools:
+    - name: unicorn-of-the-sea
 - name: k8s-narwhal
   type: k8s-type.py
   properties:
-    name: narwhal
+    cluster: narwhal
     endpoint: $(ref.cluster5.endpoint)
 - name: narwhal-workloads
   type: narwhal.jinja
   properties:
-    name: narwhal
+    cluster: narwhal
   metadata:
     dependsOn:
-    - k8s-narwhal
+    - narwhal-v1
+    - narwhal-v1-apps
 
 #- name: cluster6
 #  type: cluster.jinja
@@ -265,12 +274,13 @@ resources:
 - name: k8s-mongoose
   type: k8s-type.py
   properties:
-    name: mongoose
+    cluster: mongoose
     endpoint: $(ref.cluster7.endpoint)
 - name: mongoose-workloads
   type: mongoose.jinja
   properties:
-    name: mongoose
+    cluster: mongoose
   metadata:
     dependsOn:
-    - k8s-mongoose
+    - mongoose-v1
+    - mongoose-v1-apps

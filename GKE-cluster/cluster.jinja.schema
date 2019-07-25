@@ -66,9 +66,21 @@ properties:
     type: string
     description: Must be entered if "private-cluster" is set to true. a /28 cidr to be assigned to the masters
 
+  labels:
+    type: array
+    description: list of labels to be applied to the cluster
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+
   networkPolicy:
     type: boolean
     description: true enables calico CNI for network policy in cluster
+    default: false
 
   httpLB:
     type: boolean
@@ -93,7 +105,6 @@ properties:
         name:
           type: string
           description: name of node pool
-          default: default
         initialNodeCount:
           type: number
           description: number of nodes at creation per zone
