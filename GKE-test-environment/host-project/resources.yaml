@@ -90,6 +90,10 @@ resources:
     runTimePolicy:
     - CREATE
 
+#Enable Shared-VPC
+- name: enable-shared-vpc
+  type: compute.beta.xpnHost
+
 - name: instance1
   type: instance.jinja
   properties:
