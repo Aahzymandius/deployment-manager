@@ -9,9 +9,9 @@ resources:
     region: 
     zone: 
     #machineType: 
-    #networkInterfaces:
-    #- hostProject:
-    #  network: 
+    networkInterfaces:
+    - network:
+    #  hostProject: 
     #  subnetwork:
     #  natIP:
     #  ptrName:

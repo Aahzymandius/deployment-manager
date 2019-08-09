@@ -132,6 +132,8 @@ resources:
     location: us-central1-a
     network: local-vpc
     subnetwork: primary-local
+    nodePools:
+    - name: default
 
 - name: cluster2
   type: cluster.jinja
@@ -146,6 +148,8 @@ resources:
     - host-name: bastion
       host-cidr: $(ref.bastionip.address)/32
     master-cidr: 172.16.64.32/28
+    nodePools:
+    - name: default
 
 - name: cluster3
   type: cluster.jinja
@@ -177,8 +181,6 @@ resources:
     dependsOn:
     - hippo-v1
     - hippo-v1-apps
-  properties:
-    cluster: hippo
 
 - name: cluster4
   type: cluster.jinja
@@ -202,7 +204,7 @@ resources:
   type: k8s-type.py
   properties:
     cluster: lion
-    endpoint: $(ref.cluster4.endpoint)
+    endpoint: $(ref.lion.endpoint)
 - name: lion-worlkloads
   type: lion.jinja
   properties:
@@ -228,11 +230,9 @@ resources:
   type: k8s-type.py
   properties:
     cluster: narwhal
-    endpoint: $(ref.cluster5.endpoint)
+    endpoint: $(ref.narwhal.endpoint)
 - name: narwhal-workloads
   type: narwhal.jinja
-  properties:
-    cluster: narwhal
   metadata:
     dependsOn:
     - narwhal-v1
@@ -264,6 +264,7 @@ resources:
     pod-cidr: pods
     service-cidr: service1
     private-cluster: true
+    enablePrivateEndpoint: true
     master-cidr: 172.16.63.0/28
     httpLB: disabled
     nodePools:
@@ -276,11 +277,9 @@ resources:
   type: k8s-type.py
   properties:
     cluster: mongoose
-    endpoint: $(ref.cluster7.endpoint)
+    endpoint: $(ref.mongoose.endpoint)
 - name: mongoose-workloads
   type: mongoose.jinja
-  properties:
-    cluster: mongoose
   metadata:
     dependsOn:
     - mongoose-v1

@@ -1,1 +1,1 @@
-GKE-cluster/k8s-type.py
+/home/patrick_wolthausen/deployment-manager/GKE-cluster/k8s-type.py
