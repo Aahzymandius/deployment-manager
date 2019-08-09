@@ -9,7 +9,7 @@ required:
 properties:
   name: 
     type: string
-    description: name of the cluster and nodes
+    description: name of the virtual machine
 
   region:
     type: string
@@ -31,7 +31,7 @@ properties:
       properties:
         hostProject:
           type: string
-          description: define the host project id if using shared VPC
+          description: define the host project id if using shared VPC (leave blank if not using shared VPC)
         network:
           type: string
           default: default
