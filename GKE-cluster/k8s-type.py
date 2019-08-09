@@ -3,9 +3,10 @@ def GenerateConfig(context):
 
   endpoints = {
       '-v1': 'api/v1',
-      '-v1beta1-apps': 'apis/apps/v1beta1',
       '-v1-apps': 'apis/apps/v1',
-      '-v1beta1-extensions': 'apis/extensions/v1beta1'
+      '-v1beta1-extensions': 'apis/extensions/v1beta1',
+      '-v1beta1-policy': 'apis/policy/v1beta1',
+      '-v1-networking': 'apis/networking.k8s.io/v1'
   }
 
   resources = []
