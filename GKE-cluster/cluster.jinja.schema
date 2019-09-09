@@ -88,9 +88,7 @@ properties:
     default: false
 
   istio:
-    type: boolean
-    description: determines whether istio on GKE is enabled for the cluster. true disables it
-    default: true
+    description: If this field exists, will enable Istio in permissive mode.
 
   locations:
     type: array

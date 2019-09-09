@@ -91,8 +91,10 @@ resources:
           disabled: true
         httpLoadBalancing:
           disabled: {{ properties["httpLB"] }}
+        {% if properties['istio'] %}
         istioConfig:
-          disabled: {{ properties["istio"] }}
+          auth: AUTH_NONE
+        {% endif %}
         {% if properties["networkPolicy"] %}
         networkPolicyConfig:
           disabled: false
