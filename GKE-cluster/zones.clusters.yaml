@@ -1,0 +1,29 @@
+resources:
+- name: myclus
+  type: container.v1.cluster
+  properties:
+    projectId: [project]
+    zone: us-central1-f
+    cluster:
+      name: my-clus
+      zone: us-central1-f
+      network: [network_name]
+      subnetwork: [subnet]   ### leave this field blank if using the default network
+      initialClusterVersion: "1.13"
+      nodePools:
+      - name: my-clus-pool1
+        initialNodeCount: 0
+        config:
+          imageType: cos
+- name: my-pool-1
+  type: container.v1.nodePool
+  properties:
+    projectId: [project]
+    zone: us-central1-f
+    clusterId: $(ref.myclus.name)
+    nodePool:
+      name: my-clus-pool2
+      initialNodeCount: 0
+      version: "1.13"
+      config:
+        imageType: ubuntu

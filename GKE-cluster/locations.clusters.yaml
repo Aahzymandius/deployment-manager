@@ -1,0 +1,26 @@
+resources:
+- name: myclus
+  type: gcp-types/container-v1:projects.locations.clusters
+  properties:
+    parent: projects/[your_project]/locations/us-central1-f
+    cluster:
+      name: my-clus
+      zone: us-central1-f
+      network: [you_network]
+      subnetwork: [subnet]   ### leave this field blank if using the default network
+      initialClusterVersion: "1.13"    ## Make sure to choose a supported version. This applies to the master and the nodes
+      nodePools:
+      - name: my-clus-pool1
+        initialNodeCount: 0
+        config:
+          imageType: cos
+- name: my-pool-2
+  type: gcp-types/container-v1:projects.locations.clusters.nodePools
+  properties:
+    parent: projects/[you_project]/locations/us-central1-f/clusters/$(ref.myclus.name)
+    nodePool:
+      name: my-clus-separate-pool
+      initialNodeCount: 0
+      version: "1.13"
+      config:
+        imageType: ubuntu
